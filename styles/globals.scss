@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;  
+}
+
+body::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: #212529;        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: grey;    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: none;  /* creates padding around scroll thumb */
+}
+
+.Logo {
+  font-family: 'Marck Script', cursive;
+  color: white;
+  font-size: 30px;
+}
+.navbar {
+  padding: 0% 2.5% 0% 2.5%;
+}
+.link {
+  text-decoration: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  margin: 0% 5px 0% 5px;
+  transition: color 1s; 
+
+
+
+}
+.link:hover {
+  text-decoration: none;
+  color: white !important;
+  transition: color 1s; 
+
+}
+
+.focal-background {
+  content: "";
+  overflow: hidden;
+
+  display: block;
+  position: absolute;
+  top: -0;
+  bottom: -0;
+  left: -0;
+  right: 0%;
+  width: 105%;
+  height: 100%;
+  background: #000 url('/laptopBackground.jpg') center center fixed no-repeat;
+  background-color: #000;
+  background-size: cover;
+  filter: blur(5px) grayscale(1) opacity(1);
+  transform: scale(1.1);
+}
+
+.focal {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  height: 100vh;
+  width: auto;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.focal-focus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+
+.focal-focus span {
+  font-size: 40px;
+  font-weight: 100;
+}
+
+.go-to-one, .go-to-two {
+  text-decoration: none;
+  color: white;
+}
+.go-to-one:hover, .go-to-two:hover {
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}
+
+.go-to-portfolio {
+  margin-top: 1%;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.go-to-portfolio-flex{
+  width: max-content;
+}
+.go-to-portfolio-flex:hover {
+  cursor: pointer;
+}
+
+.portfolio-container {
+  overflow-y: hidden;
+  width: 50% !important;
+}
+
+.portfolio {
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 10px;
+  padding-bottom: 100px;
+  margin-bottom: 0;
+  background: white;
+  position: relative;
+  z-index: 2;
+}
+.portfolio::after {
+  background: inherit;
+  bottom: 0;
+  content: '';
+  display: block;
+  height: 50%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  transform: skewY(-1.5deg);
+  transform-origin: 100%;
+  z-index: -1;
+}
+
+.projects-container {
+  margin-top: 10px;
+  padding-left: 5%;
+  padding-right: 5%;
+  background-color: rgba(0,0,0, 0.75);
+  color: white;
+}
+
+.portfolio-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  
+}
+
+
+
+.project-container {
+  margin: 20px 20px 20px 20px;
+  flex: 0 1 30%;
+
+  max-width: 500px;
+  min-width: 400px;
+
+  max-height: 400px;
+  min-height: 300px;
+  height: 20vw;
+
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5%;
+  position: relative;
+
+  .project-image {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: all 1s;
+    transform: scale(1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+
+  }
+  .project-image::before {
+    content: "";
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(116, 64, 120, 0.75);
+    transition: all 1s;
+  }
+  
+  .project-text-container {
+    opacity: 0;
+    transition: all 1s;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .project-description {
+    color: white;
+    
+  }
+
+
+  .project-visit {
+    background: none;
+    border: 1px solid #B177B6;
+    border-radius: 15px;
+    color: white;
+    transition: background .5s;
+    text-decoration: none;
+    padding: 2.5px 10px 2.5px 10px;
+    
+  }
+  .project-visit:hover {
+    background: #B177B6;
+  }
+  &:hover, &:focus {
+    .project-image {
+      transform: scale(1.2);
+    }
+    .project-image:before {
+      opacity: 1;
+
+    }
+    .project-text-container {
+      opacity: 1;
+      transition: all .5s;
+    }
+  }
+}
+
+.blog-posts-container {
+  width: 100%;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-top: 30px;
+  padding-bottom: 100px;
+  margin-bottom: 0;
+  background: rgb(245, 245, 245);
+  position: relative;
+  z-index: 1;
+}
+.blog-posts-container::after {
+  background: inherit;
+  bottom: 0;
+  content: '';
+  display: block;
+  height: 50%;
+  left: 0;
+  position: absolute;
+  right: 0;
+  transform: skewY(-1.5deg);
+  transform-origin: 100%;
+  z-index: -1;
+}
+
+.blog-posts {
+  /* -webkit-mask-image: linear-gradient(to bottom, black 75%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 75%, transparent 100%); */
+  background-image: linear-gradient(to bottom, transparent, black);
+  height: auto;
+  overflow-y: hidden;
+  
+}
+
+.contact {
+  padding-top: 30px;
+  padding-bottom: 75px;
+  text-align: center;
+
+  h1 {
+    font-size: 45px;
+  }
+  h4 {
+    font-weight: 400;
+    color: #424240;
+  }
+
+  .touch-me-container {
+    margin-top: 18px;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    height: max-content;
+
+    .touch-me {
+      display: inline-block;
+      background: rgba(75, 108, 193, 1);
+      border: solid 1px rgba(75, 108, 193, 0);
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-size: 30px;
+      color: white;
+      text-decoration: none;
+      transition: all .5s;
+      &:hover {
+        background: rgba(75, 108, 193, 0);
+        border: solid 1px rgba(75, 108, 193, 1);
+
+        text-decoration: none;
+        color: rgba(75, 108, 193, 1);
+        
+        transform: scale(1.2);
+      }
+
+    }
+  }
+}

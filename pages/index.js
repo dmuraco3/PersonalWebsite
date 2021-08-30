@@ -1,6 +1,3 @@
-import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../styles/Home.module.css";
 import Navigation from "../components/navbar";
@@ -11,12 +8,8 @@ import { FaChevronDown as Down, FaChevronRight as Right } from "react-icons/fa";
 
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
 import { useEffect, useState, useRef } from "react";
-import router from "next/router";
 
 export default function Home() {
   const work = [

@@ -11,7 +11,6 @@ export default async (req, res) => {
       if (body.title && body.createdAt && body.description && body.body) {
         const post = {
           title: body.title,
-          createdAt: body.date,
           description: body.description,
           body: body.body
         };

@@ -1,0 +1,47 @@
+.MainContainer {
+  position: relative;
+  height: 100vh;
+  width: max-content;
+  .Container {
+    position: relative;
+    font-family: monospace;
+    background-color: #1B1F20;
+    height: 100%;
+    width: 250px;
+    padding-top: 50px;
+    padding-left: 0px;
+    margin-right: 0px; 
+    .CoreContainer {
+      .CategoryHeader {
+        color: white;
+        font-size: 30px;
+        padding-left: 25px;
+      }
+      .NavLink {
+        display: block;
+        width: 100%;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        padding: 10px 0px;
+      }
+      .NavLinkActive {
+        border: solid white 1px !important;
+        border-right: solid 25px white !important;
+      }
+    }
+  }
+  .User {
+    position: absolute;
+    background-color: #3D4849;
+    color: white;
+    width: 100%;
+    z-index: 1;
+    bottom: 0;
+    padding: 10px 20px;
+    .userName {
+      padding-left: 10px;
+    }
+  }
+
+}

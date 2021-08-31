@@ -12,29 +12,9 @@ import Card from "react-bootstrap/Card";
 import { useEffect, useState, useRef } from "react";
 
 export default function Home() {
-  const work = [
-    {
-      title: "this is a project",
-      description: "this is a project I've been working on",
-      link: "http://127.0.0.1:3000/about",
-      image: "/color-2174065_640.png"
-    },
-    {
-      title: "this is a project",
-      description: "this is a project I've been working on",
-      link: "http://127.0.0.1:3000/about",
-      image: "/color-2174065_640.png"
-    },
-    {
-      title: "this is a project",
-      description: "this is a project I've been working on",
-      link: "http://127.0.0.1:3000/about",
-      image: "/color-2174065_640.png"
-    }
-  ];
-
   const [posts, setPosts] = useState(null);
-
+  const [projects, setProjects] = useState(null);
+  const hostUrl = "https://8kcgg.sse.codesandbox.io/";
   const portfolio = useRef(null);
 
   const executeScroll = () => {
@@ -42,15 +22,27 @@ export default function Home() {
   };
 
   useEffect(() => {
-    if (posts === null) {
-      fetch(`https://8kcgg.sse.codesandbox.io/api/blog/posts`)
-        .then((response) => response.json())
+    if (!projects) {
+      const url = `${hostUrl}/api/projects`;
+      fetch(url)
+        .then((response) => {
+          console.log(response);
+          return response.json();
+        })
         .then((json) => {
-          console.log(json);
+          setProjects(json);
+        });
+    }
+    if (!posts) {
+      fetch(`${hostUrl}/api/blog/posts`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((json) => {
           setPosts(json);
         });
     }
-  }, [posts, setPosts]);
+  }, [posts, setPosts, projects, setProjects]);
 
   function ActiveLink({ children, href }) {
     const router = useRouter();
@@ -108,20 +100,39 @@ export default function Home() {
             </h5>
           </center>
           <div className="portfolio-flex">
-            {work.map((item) => (
-              <div className="project-container">
-                <div
-                  className="project-image"
-                  style={{ backgroundImage: `url(${item.image})` }}
-                />
-                <div style={{ zIndex: 1 }} className="project-text-container">
-                  <h6 className="project-description">{item.description}</h6>
-                  <a className="project-visit" href={item.link} target="_blank">
-                    visit website <Right size={12} />
-                  </a>
-                </div>
-              </div>
-            ))}
+            {!projects && (
+              <>
+                <Spinner animation="border" variant="primary" />
+              </>
+            )}
+            {projects && (
+              <>
+                {projects.map((item) => (
+                  <div className="project-container">
+                    <div
+                      className="project-image"
+                      style={{ backgroundImage: `url(${item.image})` }}
+                    />
+                    <div
+                      style={{ zIndex: 1 }}
+                      className="project-text-container"
+                    >
+                      <h6 className="project-description">
+                        {item.description}
+                      </h6>
+                      <a
+                        className="project-visit"
+                        href={item.link}
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        visit website <Right size={12} />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>

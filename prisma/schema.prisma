@@ -20,3 +20,17 @@ model Post {
   updatedAt   DateTime  @updatedAt @map(name: "updated_at")
   @@map(name: "posts")
 }
+
+model Project {
+  id          Int       @default(autoincrement()) @id
+  title       String 
+  description String
+  body        String
+  link        String    
+  image       String    @default("https://via.placeholder.com/640x426")
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map(name: "created_at")
+  updatedAt   DateTime  @updatedAt @map(name: "updated_at")
+  @@map(name: "projects")
+}
+

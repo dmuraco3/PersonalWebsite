@@ -23,14 +23,14 @@ function Blog({ post }) {
 // This function gets called at build time on server-side.
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
-export async function getStaticProps(context) {
+export async function getStaticProps({ params }) {
   const prisma = new PrismaClient();
-  const id = context.params.id;
+  const id = params.id;
   // const res = await fetch(url + "/api/blog/post/" + id);
   // const post = await res.json();
   const post = await prisma.post.findUnique({
     where: {
-      id: Number(id)
+      id: id
     }
   });
   post.createdAt = new Date(post.createdAt).toLocaleString();
@@ -60,7 +60,7 @@ export async function getStaticPaths() {
   const paths = posts.map((post) => {
     return {
       params: {
-        id: toString(post.id)
+        id: post.id
       }
     };
   });

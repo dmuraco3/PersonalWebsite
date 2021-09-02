@@ -23,7 +23,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!projects) {
-      const url = `${hostUrl}/api/projects`;
+      const url = `${process.env.NEXT_PUBLIC_URL}/api/projects`;
       fetch(url)
         .then((response) => {
           console.log(response);
@@ -34,7 +34,7 @@ export default function Home() {
         });
     }
     if (!posts) {
-      fetch(`${hostUrl}/api/blog/posts`)
+      fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`)
         .then((response) => {
           return response.json();
         })

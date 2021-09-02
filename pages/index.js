@@ -107,8 +107,8 @@ export default function Home() {
             )}
             {projects && (
               <>
-                {projects.map((item) => (
-                  <div className="project-container">
+                {projects.map((item, index) => (
+                  <div key={index} className="project-container">
                     <div
                       className="project-image"
                       style={{ backgroundImage: `url(${item.image})` }}
@@ -151,8 +151,8 @@ export default function Home() {
           </center>
         ) : (
           <div className="blog-posts" style={{ borderRadius: "6px" }}>
-            {posts.map((item) => (
-              <Card style={{ width: "100%" }}>
+            {posts.map((item, index) => (
+              <Card key={index} style={{ width: "100%" }}>
                 <Card.Body>
                   <Card.Title>
                     <ActiveLink href={`${hostUrl}/blog/post/${item.id}`}>

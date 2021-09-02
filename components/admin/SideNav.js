@@ -56,8 +56,9 @@ function SideNav(props) {
         </div>
         <div className={styles.ApplicationsContainer}>
           <h4 className={styles.CategoryHeader}>Applications</h4>
-          {Applications.map((item) => (
+          {Applications.map((item, index) => (
             <div
+              key={index}
               className={`${styles.NavLink} ${
                 item.active && styles.NavLinkActive
               }`}

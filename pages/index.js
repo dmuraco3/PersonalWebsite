@@ -14,7 +14,7 @@ import { useEffect, useState, useRef } from "react";
 export default function Home() {
   const [posts, setPosts] = useState(null);
   const [projects, setProjects] = useState(null);
-  const hostUrl = "https://8kcgg.sse.codesandbox.io/";
+  const hostUrl = process.env.NEXT_PUBLIC_URL;
   const portfolio = useRef(null);
 
   const executeScroll = () => {
@@ -155,9 +155,7 @@ export default function Home() {
               <Card style={{ width: "100%" }}>
                 <Card.Body>
                   <Card.Title>
-                    <ActiveLink
-                      href={`http://${window.location.host}/blog/post/${item.id}`}
-                    >
+                    <ActiveLink href={`${hostUrl}/blog/post/${item.id}`}>
                       {item.title}
                     </ActiveLink>
                   </Card.Title>

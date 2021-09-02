@@ -7,23 +7,29 @@ import {
   FaEnvelopeSquare
 } from "react-icons/fa";
 
-export default function SideNav(props) {
+import { useRouter, withRouter } from "next/router";
+function SideNav(props) {
+  const router = useRouter();
   const Applications = [
     {
       title: "Calender",
       icon: <FaCalendar />,
-      active: props.active === "Calender"
+      active: props.router.query.active === "Calender"
     },
-    { title: "Users", icon: <FaUser />, active: props.active === "Users" },
+    {
+      title: "Users",
+      icon: <FaUser />,
+      active: props.router.query.active === "Users"
+    },
     {
       title: "Messages",
       icon: <FaInbox />,
-      active: props.active === "Messages"
+      active: props.router.query.active === "Messages"
     },
     {
       title: "Email",
       icon: <FaEnvelopeSquare />,
-      active: props.active === "Email"
+      active: props.router.query.active === "Email"
     }
   ];
 
@@ -34,9 +40,13 @@ export default function SideNav(props) {
           <h4 className={styles.CategoryHeader}>Core</h4>
           <div
             className={`${styles.NavLink} ${
-              props.active === "dashboard" && styles.NavLinkActive
+              !props.router.query.active && styles.NavLinkActive
             }`}
-            href="https://8kcgg.sse.codesandbox.io/admin"
+            onClick={() => {
+              router.push({
+                pathname: `/admin`
+              });
+            }}
           >
             <a className={styles.NavLinkIcon}>
               <FaHome />
@@ -51,7 +61,12 @@ export default function SideNav(props) {
               className={`${styles.NavLink} ${
                 item.active && styles.NavLinkActive
               }`}
-              href="https://8kcgg.sse.codesandbox.io/admin"
+              onClick={() => {
+                router.push({
+                  pathname: `/admin`,
+                  query: { active: item.title }
+                });
+              }}
             >
               <a className={styles.NavLinkIcon}>{item.icon}</a>
               <a className={styles.NavLinkTitle}>{item.title}</a>
@@ -71,3 +86,5 @@ export default function SideNav(props) {
     </div>
   );
 }
+
+export default withRouter(SideNav);

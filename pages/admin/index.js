@@ -24,7 +24,7 @@ export default function Admin() {
       createdAt: new Date().toJSON().slice(0, 10)
     };
     if (session.user.isAdmin) {
-      fetch(`https://8kcgg.sse.codesandbox.io/api/blog/newpost`, {
+      fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/newpost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

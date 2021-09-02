@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import styles from "./post.module.css";
 import Navigation from "../../../components/navbar";
-
+import { PrismaClient } from "@prisma/client";
 function Blog({ post }) {
   return (
     <main>
@@ -24,34 +24,46 @@ function Blog({ post }) {
 // It may be called again, on a serverless function, if
 // revalidation is enabled and a new request comes in
 export async function getStaticProps(context) {
+  const prisma = new PrismaClient();
   const id = context.params.id;
-  var url = process.env.URL;
-  const res = await fetch(url + "/api/blog/post/" + id);
-  const post = await res.json();
+  // const res = await fetch(url + "/api/blog/post/" + id);
+  // const post = await res.json();
+  const post = await prisma.post.findUnique({
+    where: {
+      id: Number(id)
+    }
+  });
+  post.createdAt = new Date(post.createdAt).toLocaleString();
+  post.updatedAt = new Date(post.updatedAt).toLocaleString();
 
   return {
     props: {
       post
-    },
+    }
     // Next.js will attempt to re-generate the page:
     // - When a request comes in
     // - At most once every 10 seconds
-    revalidate: 10 // In seconds
+    // revalidate: 10 // In seconds
   };
 }
 
 // This function gets called at build time on server-side.
 // It may be called again, on a serverless function, if
 // the path has not been generated.
+
 export async function getStaticPaths() {
-  var url = process.env.URL;
-  const res = await fetch(url + "/api/blog/posts");
-  const posts = await res.json();
+  const prisma = new PrismaClient();
+
+  const posts = await prisma.post.findMany();
 
   // Get the paths we want to pre-render based on posts
-  const paths = posts.map((post) => ({
-    params: { id: post.id }
-  }));
+  const paths = posts.map((post) => {
+    return {
+      params: {
+        id: toString(post.id)
+      }
+    };
+  });
 
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages

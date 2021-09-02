@@ -25,9 +25,11 @@ function Blog({ post }) {
 // revalidation is enabled and a new request comes in
 export async function getStaticProps({ params }) {
   const prisma = new PrismaClient();
-  const id = params.id;
   // const res = await fetch(url + "/api/blog/post/" + id);
   // const post = await res.json();
+  var id = params.id;
+  id = parseInt(id);
+  console.log("Fifa2022", id);
   const post = await prisma.post.findUnique({
     where: {
       id: id
@@ -60,7 +62,7 @@ export async function getStaticPaths() {
   const paths = posts.map((post) => {
     return {
       params: {
-        id: post.id
+        id: post.id.toString()
       }
     };
   });
@@ -68,7 +70,7 @@ export async function getStaticPaths() {
   // We'll pre-render only these paths at build time.
   // { fallback: blocking } will server-render pages
   // on-demand if the path doesn't exist.
-  return { paths, fallback: "blocking" };
+  return { paths, fallback: false };
 }
 
 export default Blog;

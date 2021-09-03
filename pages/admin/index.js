@@ -2,18 +2,59 @@ import styles from "./Admin.module.scss";
 
 import SideNav from "components/admin/SideNav";
 
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-
 import Loader from "react-loader-spinner";
 
 import { signIn, signOut, useSession } from "next-auth/client";
 
 import { useState } from "react";
 
-export default function Admin() {
+import { Calender, Users, Messages, Email, Posts } from "components/admin";
+
+import { withRouter, useRouter } from "next/router";
+import {
+  FaCalendar,
+  FaUser,
+  FaInbox,
+  FaEnvelopeSquare,
+  FaChalkboard
+} from "react-icons/fa";
+
+function Admin(props) {
   const [session, loading] = useSession();
   const [data, setData] = useState();
+  const router = useRouter();
+  const Applications = [
+    {
+      title: "Calender",
+      icon: <FaCalendar />,
+      active: props.router.query.active === "Calender",
+      component: <Calender />
+    },
+    {
+      title: "Users",
+      icon: <FaUser />,
+      active: props.router.query.active === "Users",
+      component: <Users />
+    },
+    {
+      title: "Messages",
+      icon: <FaInbox />,
+      active: props.router.query.active === "Messages",
+      component: <Messages />
+    },
+    {
+      title: "Email",
+      icon: <FaEnvelopeSquare />,
+      active: props.router.query.active === "Email",
+      component: <Email />
+    },
+    {
+      title: "Posts",
+      icon: <FaChalkboard />,
+      active: props.router.query.active === "Posts",
+      component: <Posts />
+    }
+  ];
   function getPosts() {
     const body = {
       title: "this is test post",
@@ -35,6 +76,13 @@ export default function Admin() {
         .then((data) => setData(data));
     }
   }
+  const activetab = () => {
+    return Applications.map((item) => {
+      if (item.active) {
+        return <item.component />;
+      }
+    });
+  };
   return (
     <>
       {loading && (
@@ -60,16 +108,24 @@ export default function Admin() {
                 display: "flex"
               }}
             >
-              <SideNav session={session} active="dashboard" />
-              <div>
-                <h1>you are logged in</h1>
-                <button onClick={() => signOut()}>Sign out</button>
-                <h4>
-                  {session.user.name} {session.user.isAdmin && <>is an admin</>}
-                </h4>
-                <button onClick={() => getPosts()}>Press Me For redis</button>
-                <p>{data && <>{JSON.stringify(data)}</>}</p>
-              </div>
+              <SideNav session={session} Applications={Applications} />
+              {activetab}
+              {!props.router.query.active && (
+                <>
+                  <div>
+                    <h1>you are logged in</h1>
+                    <button onClick={() => signOut()}>Sign out</button>
+                    <h4>
+                      {session.user.name}{" "}
+                      {session.user.isAdmin && <>is an admin</>}
+                    </h4>
+                    <button onClick={() => getPosts()}>
+                      Press Me For redis
+                    </button>
+                    <p>{data && <>{JSON.stringify(data)}</>}</p>
+                  </div>
+                </>
+              )}
             </div>
           )}
           {!session && (
@@ -83,3 +139,4 @@ export default function Admin() {
     </>
   );
 }
+export default withRouter(Admin);

@@ -4,34 +4,14 @@ import {
   FaCalendar,
   FaUser,
   FaInbox,
-  FaEnvelopeSquare
+  FaEnvelopeSquare,
+  FaChalkboard
 } from "react-icons/fa";
 
 import { useRouter, withRouter } from "next/router";
 function SideNav(props) {
   const router = useRouter();
-  const Applications = [
-    {
-      title: "Calender",
-      icon: <FaCalendar />,
-      active: props.router.query.active === "Calender"
-    },
-    {
-      title: "Users",
-      icon: <FaUser />,
-      active: props.router.query.active === "Users"
-    },
-    {
-      title: "Messages",
-      icon: <FaInbox />,
-      active: props.router.query.active === "Messages"
-    },
-    {
-      title: "Email",
-      icon: <FaEnvelopeSquare />,
-      active: props.router.query.active === "Email"
-    }
-  ];
+  const Applications = props.Applications;
 
   return (
     <div className={styles.MainContainer}>

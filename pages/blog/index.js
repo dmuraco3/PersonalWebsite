@@ -1,10 +1,81 @@
-import Navigation from '../../components/navbar'
+import Navigation from "components/navbar";
+import { useEffect, useState } from "react";
+import Spinner from "react-bootstrap/Spinner";
+import { useRouter } from "next/router";
+
+import Styles from "./blog.module.scss";
 
 export default function Blog() {
+  const [data, setData] = useState();
+  useEffect(() => {
+    if (!data) {
+      fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`)
+        .then((response) => {
+          if (response) {
+            return response.json();
+          } else {
+            console.error(response);
+          }
+        })
+        .then((data) => setData(data));
+    }
+  }, [data, setData]);
+
+  function ActiveLink({ children, href }) {
+    const router = useRouter();
+    const style = {
+      marginRight: 10,
+      color: "blue"
+    };
+
+    const handleClick = (e) => {
+      e.preventDefault();
+      router.push(href);
+    };
+
     return (
-        <main>
-            <Navigation />
-            <h1>welcome to my blog</h1>
-        </main>
-    )
+      <a href={href} onClick={handleClick} style={style}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <main>
+      <Navigation />
+      <h1 style={{ textAlign: "center" }}>Posts</h1>
+      <div className={Styles.postsContainer}>
+        {data && (
+          <>
+            {data.map((item, index) => (
+              <div key={index}>
+                <h1>
+                  <ActiveLink
+                    href={`${process.env.NEXT_PUBLIC_URL}/blog/post/${item.id}`}
+                  >
+                    {item.title}
+                  </ActiveLink>
+                  <h4>{new Date(item.createdAt).toDateString("--MM-DD")}</h4>
+                  <p style={{ fontSize: 16 }}>{item.description}</p>
+                </h1>
+              </div>
+            ))}
+          </>
+        )}
+        {!data && (
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+              height: "100%",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Spinner animation="border" variant="primary" />
+          </div>
+        )}
+      </div>
+    </main>
+  );
 }

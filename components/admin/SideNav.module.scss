@@ -21,6 +21,9 @@
       text-decoration: none;
       padding: 10px 0px;
       display: flex;
+      &:hover {
+        cursor: pointer;
+      }
       .NavLinkIcon {
         padding: 0px 10px;
         color: white;

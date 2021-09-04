@@ -79,7 +79,7 @@ function Admin(props) {
   const activetab = () => {
     return Applications.map((item) => {
       if (item.active) {
-        return <item.component />;
+        return item.component;
       }
     });
   };
@@ -109,7 +109,7 @@ function Admin(props) {
               }}
             >
               <SideNav session={session} Applications={Applications} />
-              {activetab}
+              {activetab()}
               {!props.router.query.active && (
                 <>
                   <div>

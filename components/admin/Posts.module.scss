@@ -1,0 +1,45 @@
+.Container {
+  width: 100%;
+}
+.PostsHeader {
+  width: 100%;
+  text-align: center;
+}
+.PostsContainer {
+
+  width: 100%;
+  padding: 0px 50px;
+}
+.PostsHeader {
+  font-size: 30px;
+  flex: 0 1 100% ;
+  text-align: center;
+  width: 100%;
+}
+
+.PostContainer {
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 10px 10px;
+  position: relative;
+  .PostTools {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-right: 10px;
+    .Delete {
+      color: red;
+      margin: 0px 10px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    .Edit {
+      margin: 0px 10px;
+      &:hover {
+        cursor: pointer;
+      }
+
+    }
+  }
+}

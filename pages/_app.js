@@ -1,9 +1,9 @@
-import '../styles/globals.scss'
-import 'bootstrap/dist/css/bootstrap.min.css'
-
+import "../styles/globals.scss";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return <Component {...pageProps} />;
 }
 
-export default MyApp
+export default MyApp;

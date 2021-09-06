@@ -5,22 +5,7 @@ import { useRouter } from "next/router";
 
 import Styles from "./blog.module.scss";
 
-export default function Blog() {
-  const [data, setData] = useState();
-  useEffect(() => {
-    if (!data) {
-      fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`)
-        .then((response) => {
-          if (response) {
-            return response.json();
-          } else {
-            console.error(response);
-          }
-        })
-        .then((data) => setData(data));
-    }
-  }, [data, setData]);
-
+function Blog({ posts }) {
   function ActiveLink({ children, href }) {
     const router = useRouter();
     const style = {
@@ -45,9 +30,9 @@ export default function Blog() {
       <Navigation />
       <h1 style={{ textAlign: "center" }}>Posts</h1>
       <div className={Styles.postsContainer}>
-        {data && (
+        {posts && (
           <>
-            {data.map((item, index) => (
+            {posts.map((item, index) => (
               <div key={index}>
                 <h1>
                   <ActiveLink
@@ -62,7 +47,7 @@ export default function Blog() {
             ))}
           </>
         )}
-        {!data && (
+        {!posts && (
           <div
             style={{
               display: "flex",
@@ -79,3 +64,15 @@ export default function Blog() {
     </main>
   );
 }
+
+export async function getStaticProps() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`);
+  const posts = await res.json();
+  return {
+    props: {
+      posts
+    }
+  };
+}
+
+export default Blog;

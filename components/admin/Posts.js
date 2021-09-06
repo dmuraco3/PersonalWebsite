@@ -3,44 +3,63 @@ import Loader from "react-loader-spinner";
 import Styles from "./Posts.module.scss";
 import { useRouter } from "next/router";
 import { FaTrash, FaPencilAlt, FaPlusSquare } from "react-icons/fa";
-
 import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 import Switch from "react-switch";
 
 import dynamic from "next/dynamic";
-import { EditorState } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
+import ReactHtmlParser from "react-html-parser";
 import { stateToHTML } from "draft-js-export-html";
 
-function uploadImageCallBack(file) {
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://api.imgur.com/3/image");
-    xhr.setRequestHeader("Authorization", "Client-ID XXXXX");
-    const data = new FormData();
-    data.append("image", file);
-    xhr.send(data);
-    xhr.addEventListener("load", () => {
-      const response = JSON.parse(xhr.responseText);
-      resolve(response);
-    });
-    xhr.addEventListener("error", () => {
-      const error = JSON.parse(xhr.responseText);
-      reject(error);
-    });
-  });
+import axios from "axios";
+
+async function uploadInlineImageForArticle(file) {
+  const headers = {};
+  const formData = new FormData();
+  formData.append("files", file);
+  try {
+    let { data } = await axios.post(
+      `${process.env.NEXT_PUBLIC_URL}/api/upload`,
+      formData,
+      {
+        headers: { "content-type": "multipart/form-data" }
+      }
+    );
+    return data;
+  } catch (e) {
+    console.log("caught error");
+    console.error(e);
+    return null;
+  }
 }
+
+const uploadImageCallBack = async (file) => {
+  const imgData = await uploadInlineImageForArticle(file);
+  console.log(imgData);
+  return Promise.resolve({
+    data: {
+      link: `${process.env.NEXT_PUBLIC_URL}${imgData?.data}`
+    }
+  });
+};
 
 const Editor = dynamic(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
 );
-
-function FastEditor() {
+function FastEditor(props) {
   const [editor, setEditor] = useState();
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  let options = {
+    blockRenderers: {
+      code: (block) => {
+        return `<pre class=${Styles.Code}>` + block.getText() + "</pre>";
+      }
+    }
+  };
   useEffect(() => {
     if (!editor) {
       setEditor(true);
@@ -51,21 +70,30 @@ function FastEditor() {
       {editor ? (
         <>
           <Editor
+            wrapperClassName={Styles.EditorWrapperWrapper}
+            editorClassName={Styles.EditorWrapper}
+            toolbarClassName={Styles.ToolBarWrapper}
             editorState={editorState}
-            onEditorStateChange={setEditorState}
+            onEditorStateChange={(e) => {
+              setEditorState(e);
+              props.handleModalDataChange(
+                "body",
+                stateToHTML(e.getCurrentContent(), options)
+              );
+            }}
             toolbar={{
-              inline: { inDropdown: true },
               list: { inDropdown: true },
               textAlign: { inDropdown: true },
               link: { inDropdown: true },
-              history: { inDropdown: true },
               image: {
+                urlEnabled: true,
+                uploadEnabled: true,
                 uploadCallback: uploadImageCallBack,
-                alt: { present: true, mandatory: true }
+                previewImage: true,
+                alt: { present: false, mandatory: false }
               }
             }}
           />
-          <textarea disabled value={stateToHTML(editorState)} />
         </>
       ) : (
         <h1>weiner</h1>
@@ -175,7 +203,8 @@ export default function Posts() {
                 {modalData.data?.description}
               </div>
               <h1 className={Styles.PostHeader}>Body</h1>
-              <FastEditor />
+              {ReactHtmlParser(modalData.data?.body)}
+              <FastEditor handleModalDataChange={handleModalDataChange} />
             </Modal.Body>
             <Modal.Footer className={Styles.ModalFooter}>
               <Button variant="danger" onClick={handleModalClose}>

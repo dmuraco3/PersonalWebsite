@@ -8,7 +8,7 @@ import { Button } from "react-bootstrap";
 import Switch from "react-switch";
 
 import dynamic from "next/dynamic";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState, convertToRaw, RichUtils, Modifier } from "draft-js";
 import ReactHtmlParser from "react-html-parser";
 import { stateToHTML } from "draft-js-export-html";
 import { stateFromHTML } from "draft-js-import-html";
@@ -61,12 +61,13 @@ function FastEditor(props) {
       }
     }
   };
+
   useEffect(() => {
     if (!editor) {
       if (!editorState.getCurrentContent().hasText()) {
         let state = stateFromHTML(props.modalData.data?.body);
         state = EditorState.createWithContent(state);
-        console.log(props.returnModalData);
+        console.log(props.returnModalData());
         setEditorState(state);
       }
       setEditor(true);
@@ -89,6 +90,28 @@ function FastEditor(props) {
             editorClassName={Styles.EditorWrapper}
             toolbarClassName={Styles.ToolBarWrapper}
             editorState={editorState}
+            onTab={(event) => {
+              event.preventDefault();
+              let currentState = editorState
+
+              const selection = currentState.getSelection();
+              const blockType = currentState
+                  .getCurrentContent()
+                  .getBlockForKey(selection.getStartKey())
+                  .getType();
+
+              if(blockType === "unordered-list-item" || blockType === "ordered-list-item"){
+                setEditorState(RichUtils.onTab(event, currentState, 3));
+              }else{
+                let newContentState = Modifier.replaceText(
+                    currentState.getCurrentContent(),
+                    currentState.getSelection(),
+                    '    '
+                );
+            
+              setEditorState(EditorState.push(currentState, newContentState, 'insert-characters'))
+        }
+            }}
             onEditorStateChange={(e) => {
               setEditorState(e);
               props.handleModalDataChange(
@@ -120,7 +143,10 @@ function FastEditor(props) {
 export default function Posts() {
   const [posts, setPosts] = useState();
   const [modalData, setModalData] = useState({
-    title: "post"
+    title: "post",
+    data: {
+      body: ""
+    }
   });
   const returnModalData = () => {
     return modalData;
@@ -241,9 +267,10 @@ export default function Posts() {
             size={40}
             className={Styles.AddPost}
             onClick={() => {
-              setModalData({
+              setModalData((prevState) => ({
+                ...prevState,
                 title: "newPost"
-              });
+              }));
               setShowModal(true);
             }}
           />

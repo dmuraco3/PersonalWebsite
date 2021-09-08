@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import { EditorState, convertToRaw } from "draft-js";
 import ReactHtmlParser from "react-html-parser";
 import { stateToHTML } from "draft-js-export-html";
+import { stateFromHTML } from "draft-js-import-html";
 
 import axios from "axios";
 
@@ -62,11 +63,25 @@ function FastEditor(props) {
   };
   useEffect(() => {
     if (!editor) {
+      if (!editorState.getCurrentContent().hasText()) {
+        let state = stateFromHTML(props.modalData.data?.body);
+        state = EditorState.createWithContent(state);
+        console.log(props.returnModalData);
+        setEditorState(state);
+      }
       setEditor(true);
     }
-  }, [editor, setEditor]);
+  }, [editor, setEditor, props, editorState]);
   return (
     <div className="editor">
+      <button
+        onClick={() => {
+          console.log(editorState.getCurrentContent().hasText());
+        }}
+      >
+        {" "}
+        Click me to show stuff
+      </button>
       {editor ? (
         <>
           <Editor
@@ -107,6 +122,9 @@ export default function Posts() {
   const [modalData, setModalData] = useState({
     title: "post"
   });
+  const returnModalData = () => {
+    return modalData;
+  };
   const [showModal, setShowModal] = useState(false);
 
   const handleModalClose = () => setShowModal(false);
@@ -204,7 +222,11 @@ export default function Posts() {
               </div>
               <h1 className={Styles.PostHeader}>Body</h1>
               {ReactHtmlParser(modalData.data?.body)}
-              <FastEditor handleModalDataChange={handleModalDataChange} />
+              <FastEditor
+                handleModalDataChange={handleModalDataChange}
+                modalData={modalData}
+                returnModalData={returnModalData}
+              />
             </Modal.Body>
             <Modal.Footer className={Styles.ModalFooter}>
               <Button variant="danger" onClick={handleModalClose}>

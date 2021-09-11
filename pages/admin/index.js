@@ -1,6 +1,7 @@
 import styles from "./Admin.module.scss";
 
 import SideNav from "components/admin/SideNav";
+import TopNav from "components/admin/TopNav";
 
 import Loader from "react-loader-spinner";
 
@@ -103,30 +104,33 @@ function Admin(props) {
       {!loading && (
         <>
           {session && (
-            <div
-              style={{
-                display: "flex"
-              }}
-            >
-              <SideNav session={session} Applications={Applications} />
-              {activetab()}
-              {!props.router.query.active && (
-                <>
-                  <div>
-                    <h1>you are logged in</h1>
-                    <button onClick={() => signOut()}>Sign out</button>
-                    <h4>
-                      {session.user.name}{" "}
-                      {session.user.isAdmin && <>is an admin</>}
-                    </h4>
-                    <button onClick={() => getPosts()}>
-                      Press Me For redis
-                    </button>
-                    <p>{data && <>{JSON.stringify(data)}</>}</p>
-                  </div>
-                </>
-              )}
+            <div>
+              <div
+                style={{
+                  display: "flex"
+                }}
+              >
+                <SideNav session={session} Applications={Applications} />
+                {activetab()}
+                {!props.router.query.active && (
+                  <>
+                    <div>
+                      <h1>you are logged in</h1>
+                      <button onClick={() => signOut()}>Sign out</button>
+                      <h4>
+                        {session.user.name}{" "}
+                        {session.user.isAdmin && <>is an admin</>}
+                      </h4>
+                      <button onClick={() => getPosts()}>
+                        Press Me For redis
+                      </button>
+                      <p>{data && <>{JSON.stringify(data)}</>}</p>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
+            
           )}
           {!session && (
             <>

@@ -2,6 +2,8 @@ import { useRouter } from "next/router";
 import styles from "./post.module.css";
 import Navigation from "../../../components/navbar";
 import { PrismaClient } from "@prisma/client";
+import ReactHtmlParser from "react-html-parser";
+
 function Blog({ post }) {
   return (
     <main>
@@ -10,11 +12,7 @@ function Blog({ post }) {
         <h1>{post.title}</h1>
         <h5>{post.date}</h5>
         <p>{post.description}</p>
-        <div>{post.body}</div>
-        {/* do rest of showing here 
-                show description
-                show body
-            */}
+        <div>{ReactHtmlParser(post.body)}</div>
       </div>
     </main>
   );
@@ -29,7 +27,6 @@ export async function getStaticProps({ params }) {
   // const post = await res.json();
   var id = params.id;
   id = parseInt(id);
-  console.log("Fifa2022", id);
   const post = await prisma.post.findUnique({
     where: {
       id: id

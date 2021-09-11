@@ -1,160 +1,115 @@
+import TopNav from "./TopNav";
+
 import React, { useMemo, useEffect, useState, Component } from "react";
 import Loader from "react-loader-spinner";
 import Styles from "./Posts.module.scss";
 import { useRouter } from "next/router";
 import { FaTrash, FaPencilAlt, FaPlusSquare } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";
-import { Button } from "react-bootstrap";
+import { Button, FloatingLabel, Alert } from "react-bootstrap";
+import Form from 'react-bootstrap/Form'
 import Switch from "react-switch";
 
-import dynamic from "next/dynamic";
-import { EditorState, convertToRaw, RichUtils, Modifier } from "draft-js";
 import ReactHtmlParser from "react-html-parser";
-import { stateToHTML } from "draft-js-export-html";
-import { stateFromHTML } from "draft-js-import-html";
-
-import axios from "axios";
-
-async function uploadInlineImageForArticle(file) {
-  const headers = {};
-  const formData = new FormData();
-  formData.append("files", file);
-  try {
-    let { data } = await axios.post(
-      `${process.env.NEXT_PUBLIC_URL}/api/upload`,
-      formData,
-      {
-        headers: { "content-type": "multipart/form-data" }
-      }
-    );
-    return data;
-  } catch (e) {
-    console.log("caught error");
-    console.error(e);
-    return null;
-  }
-}
-
-const uploadImageCallBack = async (file) => {
-  const imgData = await uploadInlineImageForArticle(file);
-  console.log(imgData);
-  return Promise.resolve({
-    data: {
-      link: `${process.env.NEXT_PUBLIC_URL}${imgData?.data}`
-    }
-  });
-};
-
-const Editor = dynamic(
-  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
-  { ssr: false }
-);
-function FastEditor(props) {
-  const [editor, setEditor] = useState();
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  let options = {
-    blockRenderers: {
-      code: (block) => {
-        return `<pre class=${Styles.Code}>` + block.getText() + "</pre>";
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!editor) {
-      if (!editorState.getCurrentContent().hasText()) {
-        let state = stateFromHTML(props.modalData.data?.body);
-        state = EditorState.createWithContent(state);
-        console.log(props.returnModalData());
-        setEditorState(state);
-      }
-      setEditor(true);
-    }
-  }, [editor, setEditor, props, editorState]);
-  return (
-    <div className="editor">
-      <button
-        onClick={() => {
-          console.log(editorState.getCurrentContent().hasText());
-        }}
-      >
-        {" "}
-        Click me to show stuff
-      </button>
-      {editor ? (
-        <>
-          <Editor
-            wrapperClassName={Styles.EditorWrapperWrapper}
-            editorClassName={Styles.EditorWrapper}
-            toolbarClassName={Styles.ToolBarWrapper}
-            editorState={editorState}
-            onTab={(event) => {
-              event.preventDefault();
-              let currentState = editorState
-
-              const selection = currentState.getSelection();
-              const blockType = currentState
-                  .getCurrentContent()
-                  .getBlockForKey(selection.getStartKey())
-                  .getType();
-
-              if(blockType === "unordered-list-item" || blockType === "ordered-list-item"){
-                setEditorState(RichUtils.onTab(event, currentState, 3));
-              }else{
-                let newContentState = Modifier.replaceText(
-                    currentState.getCurrentContent(),
-                    currentState.getSelection(),
-                    '    '
-                );
-            
-              setEditorState(EditorState.push(currentState, newContentState, 'insert-characters'))
-        }
-            }}
-            onEditorStateChange={(e) => {
-              setEditorState(e);
-              props.handleModalDataChange(
-                "body",
-                stateToHTML(e.getCurrentContent(), options)
-              );
-            }}
-            toolbar={{
-              list: { inDropdown: true },
-              textAlign: { inDropdown: true },
-              link: { inDropdown: true },
-              image: {
-                urlEnabled: true,
-                uploadEnabled: true,
-                uploadCallback: uploadImageCallBack,
-                previewImage: true,
-                alt: { present: false, mandatory: false }
-              }
-            }}
-          />
-        </>
-      ) : (
-        <h1>weiner</h1>
-      )}
-    </div>
-  );
-}
+import FastEditor from './FastEditor'
 
 export default function Posts() {
+  const [showModal, setShowModal] = useState(false);
   const [posts, setPosts] = useState();
+  const [showPostWarning, setShowPostWarning] = useState(false);
+  const [postWarningInfo, setPostWarningInfo] = useState()
   const [modalData, setModalData] = useState({
     title: "post",
+    edit: false,
     data: {
+      published: false,
       body: ""
     }
   });
-  const returnModalData = () => {
-    return modalData;
-  };
-  const [showModal, setShowModal] = useState(false);
-
   const handleModalClose = () => setShowModal(false);
   const handleModalShow = () => setShowModal(true);
+ 
+  const postData = (url) => {
+    let data = modalData.data
+    if(!data.hasOwnProperty('title')) {
+      setPostWarningInfo("missing title")
+      setShowPostWarning(true)
+    } else if(!data.hasOwnProperty('description')) {
+      setPostWarningInfo("missing description")
+      setShowPostWarning(true)
+    } else if(!data.hasOwnProperty('published')) {
+      setPostWarningInfo("missing published")
+      
+      setShowPostWarning(true)
+    } else if(!data.hasOwnProperty('body')) {
+      setPostWarningInfo("missing body")
+      setShowPostWarning(true)      
+    } else {
+      setShowPostWarning(false)
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(modalData.data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          setShowModal(false)
+          getPosts()
+
+        })
+        .catch((error) => {
+          console.error('Error:', error)
+        })
+    }
+  }
+  const deletePost = (id) => {
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/deletepost`, {
+      method: "post",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({id: id})
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        getPosts()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+  const editPost = (data) => {
+    let postData = data
+    setModalData((prevstate, data) => (
+      {
+        ...prevstate,
+        edit:true,
+        title: "Edit Post",
+        data: {
+          title: postData.title,
+          description: postData.description,
+          published: postData.published,
+          body: postData.body,
+          id: postData.id
+        }
+      }
+    ))
+    setShowModal(true)
+  }
+  const getPosts = () => {
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        setPosts(json);
+      })
+      .catch(error => console.error(error));
+  }
 
   const handleModalDataChange = (key, value) => {
     setModalData((prevState) => ({
@@ -168,15 +123,9 @@ export default function Posts() {
 
   useEffect(() => {
     if (!posts) {
-      fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`)
-        .then((response) => {
-          return response.json();
-        })
-        .then((json) => {
-          setPosts(json);
-        });
+      getPosts()
     }
-  }, [posts, setPosts]);
+  }, [getPosts]);
 
   function ActiveLink({ children, href }) {
     const router = useRouter();
@@ -204,6 +153,7 @@ export default function Posts() {
       </div>
       {posts && (
         <div className={Styles.PostsContainer}>
+          
           <Modal
             size="lg"
             aria-labelledby="contained-modal-title-vcenter"
@@ -217,48 +167,82 @@ export default function Posts() {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className={Styles.ModalBody}>
-              <h1 className={Styles.PostHeader}>Published</h1>
-              <Switch
-                className="react-switch"
-                onChange={() => {
-                  if (modalData.data?.published) {
-                    handleModalDataChange("published", false);
-                  } else {
-                    handleModalDataChange("published", true);
-                  }
-                }}
-                checked={modalData.data?.published}
-                aria-label="super secret label that is not visible"
-              />
+            <Alert variant="danger" show={showPostWarning} onClose={() => setShowPostWarning(false)} dismissible>
+              <Alert.Heading>Error with posting this article</Alert.Heading>
+              <p>
+                {postWarningInfo}
+              </p>
+            </Alert>
+              <Form>
+                <Form.Group>
+                  <h1 className={Styles.PostHeader}>Title</h1>
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Title"
+                    className="mb-3"
+                  >
+                    <Form.Control type="text" value={modalData.data?.title} onChange={(e) => {
+                      handleModalDataChange("title", e.target.value)
+                    }}/>
+                  </FloatingLabel>
+                </Form.Group>
+                
+                <Form.Group>
+                  <h1 className={Styles.PostHeader}>Description</h1>
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="Description"
+                    className="mb-3"
+                  >
+                    <Form.Control type="text" value={modalData.data?.description} onChange={(e) => {
+                      handleModalDataChange("description", e.target.value)
+                    }} />
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group>
+                  <h1 className={Styles.PostHeader}>Published</h1>
 
-              <h1 className={Styles.PostHeader}>Title</h1>
-              <textarea
-                onChange={(event) => {
-                  console.log(event);
-                }}
-                contentEditable
-                className={Styles.PostEditable}
-              >
-                {modalData.data?.title}
-              </textarea>
+                  <Switch
+                    className="react-switch"
+                    onChange={() => {
+                      if (modalData.data?.published) {
+                        handleModalDataChange("published", false);
+                      } else {
+                        handleModalDataChange("published", true);
+                      }
+                    }}
+                    checked={modalData.data?.published}
+                    aria-label="Published"
+                    id="publishedSwitch"
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <h1 className={Styles.PostHeader}>Body</h1>
+                  
+                  <FastEditor
+                    handleModalDataChange={handleModalDataChange}
+                    modalData={modalData}
+                  />
+                </Form.Group>
+              </Form>
+              <div>
+                {ReactHtmlParser(modalData.data?.body)}
 
-              <h1 className={Styles.PostHeader}>Description</h1>
-              <div contentEditable className={Styles.PostEditable}>
-                {modalData.data?.description}
               </div>
-              <h1 className={Styles.PostHeader}>Body</h1>
-              {ReactHtmlParser(modalData.data?.body)}
-              <FastEditor
-                handleModalDataChange={handleModalDataChange}
-                modalData={modalData}
-                returnModalData={returnModalData}
-              />
+              
             </Modal.Body>
             <Modal.Footer className={Styles.ModalFooter}>
               <Button variant="danger" onClick={handleModalClose}>
                 Close
               </Button>
-              <Button variant="primary" onClick={handleModalClose}>
+              <Button variant="primary" onClick={() => {
+                if(modalData.edit){
+                  postData(`${process.env.NEXT_PUBLIC_URL}/api/blog/editpost`)
+                }
+                if(!modalData.edit){
+                  postData(`${process.env.NEXT_PUBLIC_URL}/api/blog/newpost`)
+                }
+              }}>
                 Save Changes
               </Button>
             </Modal.Footer>
@@ -281,26 +265,29 @@ export default function Posts() {
                   className={Styles.Edit}
                   size={20}
                   onClick={() => {
-                    console.log();
+                    editPost(item)
                   }}
                 />
                 <FaTrash
                   className={Styles.Delete}
                   size={20}
                   onClick={() => {
-                    console.log();
+                    deletePost(item.id)
                   }}
                 />
               </div>
-              <h1>
-                <ActiveLink
-                  href={`${process.env.NEXT_PUBLIC_URL}/blog/post/${item.id}`}
-                >
-                  {item.title}
-                </ActiveLink>
-                <h4>{new Date(item.createdAt).toDateString("--MM-DD")}</h4>
-                <p style={{ fontSize: 16 }}>{item.description}</p>
-              </h1>
+              <div className={Styles.PostMain}>
+                <h1>
+                  <ActiveLink
+                    href={`${process.env.NEXT_PUBLIC_URL}/blog/post/${item.id}`}
+                  >
+                    {item.title}
+                  </ActiveLink>
+                  <h4>{new Date(item.createdAt).toDateString("--MM-DD")}</h4>
+                  <p style={{ fontSize: 16 }}>{item.description}</p>
+                </h1>
+
+              </div>
             </div>
           ))}
         </div>

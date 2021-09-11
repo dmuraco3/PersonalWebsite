@@ -3,6 +3,7 @@ import TopNav from "./TopNav";
 import React, { useMemo, useEffect, useState, Component } from "react";
 import Loader from "react-loader-spinner";
 import Styles from "./Posts.module.scss";
+import PostStyles from "../../pages/blog/post/[id]"
 import { useRouter } from "next/router";
 import { FaTrash, FaPencilAlt, FaPlusSquare } from "react-icons/fa";
 import Modal from "react-bootstrap/Modal";

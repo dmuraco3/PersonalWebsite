@@ -1,4 +1,5 @@
 import Styles from './Posts.module.scss'
+import PostStyles from '../../pages/blog/post/post.module.scss'
 
 import { useState, useEffect } from "react";
 
@@ -51,7 +52,7 @@ export default function FastEditor(props) {
     let options = {
       blockRenderers: {
         code: (block) => {
-          return `<pre class=${Styles.Code}>` + block.getText() + "</pre>";
+          return `<pre class=${PostStyles.Code}>` + block.getText() + "</pre>";
         }
       }
     };

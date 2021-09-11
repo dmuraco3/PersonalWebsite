@@ -65,7 +65,7 @@ function Blog({ posts }) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`);
   const posts = await res.json();
   return {

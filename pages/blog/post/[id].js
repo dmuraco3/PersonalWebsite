@@ -9,8 +9,11 @@ function Blog({ post }) {
     <main>
       <Navigation />
       <div className={styles.mainContainer}>
-        <h1>{post.title}</h1>
-        <h5>{post.date}</h5>
+        <div className={styles.PostHeading}>
+          <h1>{post.title}</h1>
+          <h5 className={styles.Time}>{post.updatedAt}</h5>
+
+        </div>
         <p>{post.description}</p>
         <div>{ReactHtmlParser(post.body)}</div>
       </div>

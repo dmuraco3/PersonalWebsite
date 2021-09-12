@@ -51,9 +51,18 @@ export default function FastEditor(props) {
     );
     let options = {
       blockRenderers: {
+        "unstyled": (block) => {
+          return `<p class=${PostStyles.Normal}>` + block.getText() +`</P>` 
+        },
+        "header-one": (block) => {
+          return `<h1 class=${PostStyles.HeaderOne}>` + block.getText()+ `</h1>`
+        },
+        "blockquote": (block) => {
+          return `<blockquote class=${PostStyles.BlockQuote}>` + block.getText()  + `</blockquote>`
+        },
         code: (block) => {
           return `<pre class=${PostStyles.Code}>` + block.getText() + "</pre>";
-        }
+        },
       }
     };
   
@@ -72,6 +81,10 @@ export default function FastEditor(props) {
         
         {editor ? (
           <>
+            <button onClick={(e) => {
+              e.preventDefault()
+              console.log(editorState.getCurrentContent().getBlockMap())
+            }}>Click me </button>
             <Editor
               wrapperClassName={Styles.EditorWrapperWrapper}
               editorClassName={Styles.EditorWrapper}

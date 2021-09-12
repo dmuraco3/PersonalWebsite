@@ -1,6 +1,20 @@
 .mainContainer {
     color: black;
-    margin: 0% 2.5% 0% 2.5%;
+    margin: 0% 25% 0% 25%;
+}
+
+.PostHeading {
+    .Time {
+        color: #828282;
+        font-weight: normal;
+        font-size: 16px;
+    }
+    margin-top: 2.5%;
+    margin-bottom: 5%;
+}
+.BlockQuote {
+    border-left: 5px solid #f1f1f1;
+    padding-left: 5px;
 }
 .Code{
     background: #f1f1f1;

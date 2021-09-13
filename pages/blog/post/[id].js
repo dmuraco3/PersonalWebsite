@@ -12,9 +12,8 @@ function Blog({ post }) {
         <div className={styles.PostHeading}>
           <h1>{post.title}</h1>
           <h5 className={styles.Time}>{post.updatedAt}</h5>
-
+          <p className={styles.PostDescription}>{post.description}</p>
         </div>
-        <p>{post.description}</p>
         <div>{ReactHtmlParser(post.body)}</div>
       </div>
     </main>
@@ -28,8 +27,8 @@ export async function getServerSideProps(context) {
   const prisma = new PrismaClient();
   // const res = await fetch(url + "/api/blog/post/" + id);
   // const post = await res.json();
-  let {id} = context.query;
-  id = parseInt(id)
+  let { id } = context.query;
+  id = parseInt(id);
   const post = await prisma.post.findUnique({
     where: {
       id: id

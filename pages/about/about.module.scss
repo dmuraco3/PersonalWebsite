@@ -1,0 +1,35 @@
+.main {
+    padding-top: 20px;
+    .center {
+        text-align: center;
+
+        .container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            
+        }
+        .ProfilePicContainer {
+            width: 20%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+            display: inline-block;
+            overflow: hidden;
+            border-radius: 100%;
+            .ProfilePic {
+                
+            }
+        }
+        .socialHandles {
+            width: 12.5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .SocialHandle {
+                color: black;
+            }
+        }
+    }
+}

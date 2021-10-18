@@ -1,0 +1,242 @@
+@mixin  for-mobile-only {
+    @media (max-width: 1128px) { @content; }
+}
+
+@mixin for-not-mobile {
+    @media (min-width: 1128px) { @content; }
+    
+}
+
+.ProjectsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #F7F7F7;
+    position: relative;
+    .MobileProjects {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        display:none;
+        .ProjectContainer {
+            padding: 0px !important;
+            .ProjectCard {
+                flex: 0 1 100%;
+                margin: 20px 10px !important;
+            }
+        }
+        @include for-mobile-only() {
+            height: 100%;
+            display: flex !important;
+        }
+        @include for-not-mobile() {
+            display: none;
+            height: 0px;
+        }
+    }
+    
+    .ProjectContainer {
+        padding: 20px 10px 40px 10px;
+        .ProjectCard {
+            flex: 0 1 100%;
+            margin: 100px;
+            box-shadow: 0px 1px 22px 4px rgba(0, 0, 0, 0.07);
+            
+            .CardHeader {
+                background: #46b8e9;
+                padding: 10px 20px;
+                flex-wrap: wrap;
+                display: flex;
+                position: relative;
+                
+                .ProjectDateContainer {
+                    flex: 0 1 16%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 20px;
+                    min-width: 20px;
+                    margin: 0px 10px;
+                    .ProjectDate {
+                        color: white;
+                        
+                    }
+                }
+                .ProjectTitleContainer {
+                    flex: 0 1 80%;
+
+                    .ProjectTitle {
+                        color: white;
+                    }
+                }
+            }
+            .CardBody {
+                flex: 1 1 100%;
+                padding: 10px 20px;
+                .ProjectLinksContainer {
+                    margin: 20px 0px;
+                    display: flex;
+                    justify-content: center;
+
+                    .WebsiteLink {
+                        flex: 0 1 25%;
+                        text-decoration: none;
+                        color: white;
+                        background: #405cf5;
+                        border: 0;
+                        border-radius: 12px;
+                        color: #FFFFFF;
+                        cursor: pointer;
+                        display: inline-block;
+                        font-size: 16px;
+                        line-height: 2.5;
+                        outline: transparent;
+                        padding: 0 1rem;
+                        text-align: center;
+                        text-decoration: none;
+                        transition: box-shadow .2s ease-in-out;
+                        user-select: none;
+                        -webkit-user-select: none;
+                        touch-action: manipulation;
+                        white-space: nowrap;
+                        margin: 0px 10px;
+
+                    }
+
+                    
+                    .GithubLink {
+                        flex: 0 1 25%;
+                        background: linear-gradient(to bottom right, #EF4765, #FF9A5A);
+                        border: 0;
+                        border-radius: 12px;
+                        color: #FFFFFF;
+                        cursor: pointer;
+                        display: inline-block;
+                        font-size: 16px;
+                        line-height: 2.5;
+                        outline: transparent;
+                        padding: 0 1rem;
+                        text-align: center;
+                        text-decoration: none;
+                        transition: box-shadow .2s ease-in-out;
+                        user-select: none;
+                        -webkit-user-select: none;
+                        touch-action: manipulation;
+                        white-space: nowrap;
+
+                        margin: 0px 10px;
+                        &:hover {
+                            box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
+                            transition: box-shadow .2s ease-in-out;
+
+                        }
+                    }
+                    
+                }
+            }
+        }
+
+    }
+    @include for-not-mobile() {
+        .DesktopProjects {
+            display: block;
+            height: 100%;
+        }
+    }
+    @include for-mobile-only() {
+        .DesktopProjects {
+            display: none !important;
+            height: 0px;
+            width: 0px;
+        }
+    }
+    .DesktopProjects {
+        display: flex;
+        @include for-not-mobile() {
+            &::after {
+                position: absolute;
+                top: 50px;
+                left: 50%;
+                width: 2px;
+                height: 75%;
+                margin-left: -1px;
+                content: "";
+                background: rgba(0, 0, 0, 1);
+    
+            }
+        }
+        position: relative;
+        .Left {
+            flex: 0 1 50%;
+            .CardHeader {
+                // background: #46b8e9;
+                &:before {
+                    position: absolute;
+                    text-align: right;
+                    left: calc(100%);
+                    transform:translateY(25%);
+                    width: 0; 
+                    height: 0; 
+                    display: block;
+                    border-top: 20px solid transparent;
+                    border-bottom: 20px solid transparent;
+                    
+                    border-left: 25px solid #46b8e9;
+                    content: "";
+                }
+                &:after {
+                    position: absolute;
+                    text-align: right;
+                    left: 100%;
+                    transform: translate(450%, 75%);
+                    width: 5px; 
+                    height: 5px; 
+                    display: block;
+                    padding: 1px;
+                    background-color: white;
+                    border: 10px solid black;
+                    border-radius: 100%;
+                    content: " ";
+                }
+                
+            }
+        }
+        
+        .Right {
+            flex: 0 1 50%;
+            margin-top: 100px;
+            .CardHeader {
+                // background: #46b8e9;
+                &:before {
+                    position: absolute;
+                    text-align: right;
+                    left: calc(0%);
+                    transform:translate(-100%, 25%);
+                    width: 0; 
+                    height: 0; 
+                    display: block;
+                    border-top: 20px solid transparent;
+                    border-bottom: 20px solid transparent;
+                    
+                    border-right: 25px solid #46b8e9;
+                    content: "";
+                }
+                &:after {
+                    position: absolute;
+                    text-align: right;
+                    left: 0%;
+                    transform: translate(-550%, 75%);
+                    width: 5px; 
+                    height: 5px; 
+                    display: block;
+                    padding: 1px;
+                    background-color: white;
+                    border: 10px solid black;
+                    border-radius: 100%;
+                    content: " ";
+                }
+                
+            }
+        }
+
+    }
+}

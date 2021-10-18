@@ -126,7 +126,7 @@ export default function Posts() {
     if (!posts) {
       getPosts()
     }
-  }, [getPosts]);
+  }, [posts, getPosts]);
 
   function ActiveLink({ children, href }) {
     const router = useRouter();

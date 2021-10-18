@@ -1,10 +1,16 @@
 import Styles from "./Posts.module.scss";
 import PostStyles from "../../pages/blog/post/post.module.scss";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, } from "react";
+import ReactDOMServer from "react-dom/server";
+
+import Lowlight from "react-lowlight";
+import js from "highlight.js/lib/languages/javascript";
+Lowlight.registerLanguage("js", js);
 
 import dynamic from "next/dynamic";
-import { EditorState, convertToRaw, RichUtils, Modifier } from "draft-js";
+import { EditorState, convertToRaw, RichUtils, Modifier, EditorBlock, DefaultDraftBlockRenderMap} from "draft-js";
+import {Map} from 'immutable';
 import ReactHtmlParser from "react-html-parser";
 import { stateToHTML } from "draft-js-export-html";
 import { stateFromHTML } from "draft-js-import-html";
@@ -49,6 +55,26 @@ export default function FastEditor(props) {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  class codeBlock extends React.Component {
+    render() {
+      let data;
+      return (
+        <>
+          <EditorBlock {...this.props} onChange={() => console.log(this.props)}/>
+        </>
+      )
+    }
+  }
+  
+  function myBlockRenderer(contentBlock) {
+    const type = contentBlock.getType();
+    if (type === 'code') {
+      return {
+        component: codeBlock,
+        
+      };
+    }
+  }
   let options = {
     inlineStyles: {
       // Override default element (`strong`).
@@ -106,7 +132,9 @@ export default function FastEditor(props) {
         );
       },
       code: (block) => {
-        return `<pre class=${PostStyles.Code}>` + block.getText() + "</pre>";
+        return ReactDOMServer.renderToStaticMarkup(
+          <Lowlight language="js" value={block.getText()} />
+        )
       }
     }
   };
@@ -125,19 +153,15 @@ export default function FastEditor(props) {
     <div className="editor">
       {editor ? (
         <>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(editorState.getCurrentContent().getBlocksAsArray());
-            }}
-          >
-            Click me{" "}
-          </button>
+          
           <Editor
+           
             wrapperClassName={Styles.EditorWrapperWrapper}
             editorClassName={Styles.EditorWrapper}
             toolbarClassName={Styles.ToolBarWrapper}
+            blockRendererFn={myBlockRenderer}
             editorState={editorState}
+            // blockRenderMap={extendedBlockRenderMap}
             onTab={(event) => {
               event.preventDefault();
               let currentState = editorState;
@@ -177,6 +201,7 @@ export default function FastEditor(props) {
               );
             }}
             toolbar={{
+
               list: { inDropdown: true },
               textAlign: { inDropdown: true },
               link: { inDropdown: true },

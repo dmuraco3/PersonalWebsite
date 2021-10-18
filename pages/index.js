@@ -175,7 +175,7 @@ export default function Home() {
         <h1>Let's Work Together</h1>
         <h4>Have a project you'd like to discuss?</h4>
         <div className="touch-me-container">
-          <a className="touch-me" href="http://127.0.0.1:3000/contact">
+          <a className="touch-me" href={`${process.env.NEXT_PUBLIC_URL}/contact`}>
             Get in Touch
           </a>
         </div>

@@ -1,16 +1,25 @@
 import { useState, useEffect } from "react";
 
 export default function Footer() {
-  const [styles, setStyles] = useState({});
-  useEffect(() => {
+  const [styles, setStyles] = useState();
+  const [windowListener, setWindowListener] = useState();
+  const changeStyle =() => {
     const contentHeight = document.body.scrollHeight;
     const innerHeight = window.innerHeight;
-    if (contentHeight <= innerHeight) {
+    if (document.body.scrollHeight <= innerHeight) {
       setStyles(halfStyle);
     } else {
       setStyles(fullStyle);
     }
-  }, [styles, setStyles]);
+  }
+  useEffect(() => {
+    if(!windowListener){
+      window.addEventListener("resize", changeStyle);
+      window.addEventListener("scroll", changeStyle);
+      setWindowListener(true);
+    }
+    
+  }, [windowListener, changeStyle]);
   const fullStyle = {
     backgroundColor: "#212529",
     color: "white",

@@ -1,6 +1,7 @@
 import Navigation from "components/navbar";
 import Styles from './about.module.scss'
 import Footer from 'components/Footer'
+import Image from 'next/image';
 import {FaTwitter, FaYoutube, FaGithub} from 'react-icons/fa'
 export default function About() {
   return (
@@ -13,19 +14,19 @@ export default function About() {
 
               <div className={Styles.container}>
                 <div className={Styles.ProfilePicContainer}>
-                  <img src="/ProfilePig.jpg" className={Styles.ProfilePic}width="100%" alt="Profile Pic"/>
+                  <Image src="/ProfilePig.jpg" className={Styles.ProfilePic}width="100%" alt="Profile Pic"/>
                 </div>
               </div>
               <div className={Styles.container} >
 
                 <div className={Styles.socialHandles}>
-                  <a href="https://twitter.com/MuracoDylan" target="_blank" className={Styles.SocialHandle}>
+                  <a href="https://twitter.com/MuracoDylan" target="_blank" rel="noreferrer" className={Styles.SocialHandle}>
                     <FaTwitter size={30}/>
                   </a>
-                  <a href="https://www.youtube.com/channel/UCF-V-KW5-Cd-QUvkiBYTcFg" target="_blank" className={Styles.SocialHandle}>
+                  <a href="https://www.youtube.com/channel/UCF-V-KW5-Cd-QUvkiBYTcFg" target="_blank" rel="noreferrer" className={Styles.SocialHandle}>
                     <FaYoutube size={60} />
                   </a>
-                  <a href="https://github.com/dmuraco3" target="_blank" className={Styles.SocialHandle}>
+                  <a href="https://github.com/dmuraco3" target="_blank" rel="noreferrer" className={Styles.SocialHandle}>
                     <FaGithub size={30} />
 
                   </a>

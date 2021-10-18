@@ -5,5 +5,8 @@ module.exports = {
   webpack: (config) => {
     config.resolve.alias["components"] = path.resolve("components");
     return config;
+  },
+  images: {
+    domains: ["via.placeholder.com"]
   }
 };

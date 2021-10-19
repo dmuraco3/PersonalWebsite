@@ -12,6 +12,8 @@
     flex-wrap: wrap;
     background-color: #F7F7F7;
     position: relative;
+    width: 100%;
+    justify-content: center;
     .MobileProjects {
         display: flex;
         justify-content: center;
@@ -19,8 +21,11 @@
         display:none;
         .ProjectContainer {
             padding: 0px !important;
+            flex: 1 1 100%;
+            margin: 0% 10%;
+
             .ProjectCard {
-                flex: 0 1 100%;
+                flex: 1 1 100%;
                 margin: 20px 10px !important;
             }
         }
@@ -72,6 +77,14 @@
             .CardBody {
                 flex: 1 1 100%;
                 padding: 10px 20px;
+                .ProjectImageContainer {
+                    position: relative;
+                    width: 100%;
+                    padding-bottom: calc((9/ 16) * 100%);
+                    .ProjectImage {
+                        width: 100%;
+                    }
+                }
                 .ProjectLinksContainer {
                     margin: 20px 0px;
                     display: flex;

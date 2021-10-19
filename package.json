@@ -19,6 +19,7 @@
     "draft-js-export-html": "1.4.1",
     "draft-js-import-html": "1.4.1",
     "draft.js": "0.2.0",
+    "highlight.js": "^9.18.5",
     "lowlight": "^2.3.0",
     "multer": "1.4.3",
     "next": "^11.1.1",

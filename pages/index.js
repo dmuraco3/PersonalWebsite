@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
-import styles from "../styles/Home.module.css";
+import ProjectStyles from './homeProjects.module.scss'
 import Navigation from "../components/navbar";
 import Footer from "../components/Footer";
 
 import Typist from "react-typist";
 import { FaChevronDown as Down, FaChevronRight as Right } from "react-icons/fa";
+
+import Image from 'next/image'
 
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
@@ -99,7 +101,7 @@ export default function Home() {
               Here are a few projects I've worked on recently
             </h5>
           </center>
-          <div className="portfolio-flex">
+          <div className={ProjectStyles.ProjectsContainer}>
             {!projects && (
               <>
                 <Spinner animation="border" variant="primary" />
@@ -108,26 +110,25 @@ export default function Home() {
             {projects && (
               <>
                 {projects.map((item, index) => (
-                  <div key={index} className="project-container">
-                    <div
-                      className="project-image"
-                      style={{ backgroundImage: `url(${item.image})` }}
-                    />
-                    <div
-                      style={{ zIndex: 1 }}
-                      className="project-text-container"
-                    >
-                      <h6 className="project-description">
-                        {item.description}
-                      </h6>
-                      <a
-                        className="project-visit"
-                        href={item.link}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        visit website <Right size={12} />
-                      </a>
+                  <div className={ProjectStyles.ProjectContainer} key={index}>
+                    <div className={ProjectStyles.ProjectDateContainer}>
+                      <span className={ProjectStyles.ProjectDate}>
+                        {new Date(item.createdAt).toLocaleDateString()}
+                        </span>
+                    </div>
+                    <div className={ProjectStyles.ProjectTitleContainer}>
+                      <h1 className={ProjectStyles.ProjectTitle}>{item.title}</h1>
+                    </div>
+                    <div className={ProjectStyles.ProjectImageContainer}>
+                      <Image className={ProjectStyles.ProjectImage} src={item.image} layout="fill" objectFit="cover"/>
+                    </div>
+                    <div className={ProjectStyles.ProjectDescriptionContainer}>
+                      <p className={ProjectStyles.ProjectDescription}>{item.description}</p>
+                    </div>
+                    <div className={ProjectStyles.ProjectLinkContainer}>
+                      <a className={ProjectStyles.ProjectLink} href={item.link}>View Website</a>
+                      <a className={ProjectStyles.CodeLink} href={item.codeLink}>View Code</a>
+
                     </div>
                   </div>
                 ))}

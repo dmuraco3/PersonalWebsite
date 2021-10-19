@@ -1,0 +1,70 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap');
+
+.ProjectsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    .ProjectContainer {
+        flex: 1 1 31%;
+        min-width: 317px;
+        margin: 10px;
+        padding: 10px;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        .ProjectDateContainer {
+            text-align: right;
+            .ProjectDate {
+                font-weight: 500;
+            }
+        }
+        .ProjectTitleContainer {
+            text-align: center;
+            .ProjectTitle {
+                font-family: 'Montserrat', sans-serif;
+                font-weight: 600;
+                font-size:clamp(1.8em, 3vw, 3.2em);
+            }
+        }
+        .ProjectImageContainer {
+            position: relative;
+            padding-bottom: calc((9 / 16) * 100%);
+        }
+        .ProjectDescriptionContainer {
+            margin-top: 10px;
+            .ProjectDescription {
+                font-family: 'Montserrat', sans-serif;
+                
+            }
+        }
+        .ProjectLinkContainer {
+            margin-top: 10px;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            border-bottom: 4px solid black;
+            .ProjectLink, .CodeLink {
+                margin: 0px 10px;
+                padding: 10px 10px;
+                flex: 0 1 30%;
+                text-align: center;
+                text-decoration: none;
+                font-family: 'Montserrat', sans-serif;
+                color: white;
+            }
+            .ProjectLink {
+                background-color: #2196F3;
+                &:hover {
+                    box-shadow: #2196F3 0px 8px 24px;
+
+                }
+            }
+            .CodeLink {
+                background-color: #3DD28D;
+                &:hover {
+                    box-shadow: #3DD28D 0px 8px 24px;
+
+                }
+            }
+        }
+    }
+}

@@ -6,12 +6,12 @@ import Image from "next/image";
 
 import Footer from "components/Footer";
 
-export default function Projects() {
-  const [projects, setProjects] = useState();
+export default function Projects({projects}) {
   const [evenProjects, setEvenProjects] = useState([]);
   const [oddProjects, setOddProjects] = useState([]);
 
   const projectsParser = (projects) => {
+    console.log(projects)
     projects.forEach((project, index) => {
       if (index % 2 === 0) {
         setEvenProjects((evenProjects) => [...evenProjects, project]);
@@ -21,21 +21,14 @@ export default function Projects() {
     });
   };
   useEffect(() => {
-    if (!projects) {
-      fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProjects(data);
-          projectsParser(data);
-          console.log(data);
-        })
-        .catch((err) => console.log(err));
+    if(projects && oddProjects.length === 0) {
+      projectsParser(projects);
     }
-  });
+  }, [projects, oddProjects]);
 
   const ProjectCard = ({ project, index }) => {
     return (
-      <div className={styles.ProjectContainer} key={index}>
+      <div className={styles.ProjectContainer}>
         <div className={styles.ProjectCard}>
           <div className={styles.CardHeader}>
             <div className={styles.ProjectTitleContainer}>
@@ -91,20 +84,20 @@ export default function Projects() {
         <div className={styles.MobileProjects}>
           {projects &&
             projects.map((project, index) => (
-              <ProjectCard project={project} index={index} />
+              <ProjectCard project={project} key={index} />
             ))}
         </div>
         <div className={styles.DesktopProjects}>
           <div className={styles.Left}>
             {evenProjects &&
               evenProjects.map((project, index) => (
-                <ProjectCard project={project} index={index} />
+                <ProjectCard project={project} key={index} />
               ))}
           </div>
           <div className={styles.Right}>
             {oddProjects &&
               oddProjects.map((project, index) => (
-                <ProjectCard project={project} index={index} />
+                <ProjectCard project={project} key={index} />
               ))}
           </div>
         </div>
@@ -112,4 +105,21 @@ export default function Projects() {
       <Footer />
     </main>
   );
+}
+
+export async function getServerSideProps(context) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`);
+  const data = await res.json();
+  if(!data) {
+    return {
+      notFound: true
+    }
+  } else {
+    return { 
+      props: {
+         projects: data
+      } 
+    };
+
+  }
 }

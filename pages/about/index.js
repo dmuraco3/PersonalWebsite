@@ -9,8 +9,11 @@ export default function About() {
       <Navigation />
       <div className={Styles.main}>
         <div className={Styles.center}>
-          <h1>Who Am I?</h1>
-          <div>
+          <div className={Styles.AboutHeader}>
+            <h1>Who Am I?</h1>
+
+          </div>
+          <div className={Styles.AboutBody}>
             <div className={Styles.container}>
               <div className={Styles.ProfilePicContainer}>
                 <Image
@@ -38,7 +41,7 @@ export default function About() {
                   rel="noreferrer"
                   className={Styles.SocialHandle}
                 >
-                  <FaYoutube size={60} />
+                  <FaYoutube size={60} color="#FF0000"/>
                 </a>
                 <a
                   href="https://github.com/dmuraco3"
@@ -51,12 +54,19 @@ export default function About() {
               </div>
             </div>
             <div className={Styles.container}>
-              <p>I am developer </p>
+              <div className={Styles.AboutMe}>
+                <p> I am developer</p>
+              </div>
             </div>
 
-            <div className={Styles.container}>
+            {/* <div className={Styles.container}>
               <h2>My Skills</h2>
-            </div>
+              <div className={Styles.SkillsContainer}>
+                <div className={Styles.Skill}>
+
+                </div>
+              </div>
+            </div> */}
           </div>
         </div>
       </div>

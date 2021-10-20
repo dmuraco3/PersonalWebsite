@@ -1,9 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap');
+
 .main {
     padding-top: 20px;
     .center {
-        text-align: center;
-
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        .AboutHeader {
+            flex: 0 1 100%;
+            text-align: center;
+        }
+        .AboutBody {
+            flex: 0 1 100%;
+            display: flex;
+            flex-wrap: wrap;
+            .container {
+                flex: 0 1 100%;
+            }
+        }
         .container {
+            flex: 1 1 100%;
             margin-top: 15px;
             display: flex;
             justify-content: center;
@@ -25,13 +41,19 @@
             }
         }
         .socialHandles {
-            width: 12.5%;
+            flex: 0 1 100%;
+            padding: 0% 3%;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             .SocialHandle {
                 color: black;
+                margin: 0px 10px;
             }
+        }
+        .AboutMe {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
         }
     }
 }

@@ -1,53 +1,83 @@
-.main {
+.Contact {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    .ContactHeaderContainer{
+        flex: 1 1 100%;
+        margin-bottom: 50px;
+        .ContactHeader {
+            text-align: center;
+        }
+        .ContactInfo {
+            text-align: center;
+        }
+    }
+    .ContactFormContainer {
+        flex: 1 1 100%;
+
+        .ContactForm {
+            padding: 0px 20px;
+            margin-bottom: 20px;
+            .FormRow {
+                display: flex;
+                margin-bottom: 20px;
+                justify-content: center;
+            }
+            .FormNameContainer, .FormEmailContainer {
+                flex: 1 1 50%;
+                .FormNameInput, .FormEmailInput {
+                    padding: 10px;
+                    width: 90%;
+                    &:focus {
+                        border: 1px solid #000 !important;
+                        box-shadow: rgba(75, 108, 193, 1) 0px 10px 36px 0px, rgba(75, 108, 193, 1) 0px 0px 0px 1px;
+                        outline: none;
+                    }
+                }
+            }
+            .FormEmailContainer {text-align: right;}
+            .FormMessageContainer {
+                flex: 1 1 100%;
+                .FormMessageInput {
+                    padding: 10px;
+                    width: 100%;
+                    &:focus {
+                        border: 1px solid #000 !important;
+                        box-shadow: rgba(75, 108, 193, 1) 0px 10px 36px 0px, rgba(75, 108, 193, 1) 0px 0px 0px 1px;
+                        outline: none;
+                    }
+                }
+            }
+        }
+    }
+}
+.buttonHolder {
+    margin-top: 10px;
+    position: relative;
+    width: 100%;
     text-align: center;
-    padding: 25px 50px;
-    h1 {
-        font-size: 50px;
-    }
-    h4 {
-        font-weight: 400;
-    }
-    .buttonHolder {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        width: 100%;
-        margin-top: 10px;
-        .submitButton {
-            background: none;
-            border: none;
+    height: max-content;
 
-        }
-    }
+    .submitButton {
+      display: inline-block;
+      background: rgba(75, 108, 193, 1);
+      border: solid 1px rgba(75, 108, 193, 0);
+      border-radius: 30px;
+      padding: 10px 20px;
+      font-size: 30px;
+      color: white;
+      text-decoration: none;
+      transition: all .5s;
+      &:hover {
+        background: rgba(75, 108, 193, 0);
+        border: solid 1px rgba(75, 108, 193, 1);
 
-    .buttonHolder {
-        margin-top: 10px;
-        position: relative;
-        width: 100%;
-        text-align: center;
-        height: max-content;
-    
-        .submitButton {
-          display: inline-block;
-          background: rgba(75, 108, 193, 1);
-          border: solid 1px rgba(75, 108, 193, 0);
-          border-radius: 30px;
-          padding: 10px 20px;
-          font-size: 30px;
-          color: white;
-          text-decoration: none;
-          transition: all .5s;
-          &:hover {
-            background: rgba(75, 108, 193, 0);
-            border: solid 1px rgba(75, 108, 193, 1);
-    
-            text-decoration: none;
-            color: rgba(75, 108, 193, 1);
-            
-            transform: scale(1.2);
-          }
-    
-        }
+        text-decoration: none;
+        color: rgba(75, 108, 193, 1);
+        
+        transform: scale(1.2);
+      }
+
     }
 }

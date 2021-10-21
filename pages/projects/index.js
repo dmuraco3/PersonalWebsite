@@ -6,12 +6,12 @@ import Image from "next/image";
 
 import Footer from "components/Footer";
 
-export default function Projects({projects}) {
+export default function Projects({ projects }) {
   const [evenProjects, setEvenProjects] = useState([]);
   const [oddProjects, setOddProjects] = useState([]);
 
   const projectsParser = (projects) => {
-    console.log(projects)
+    console.log(projects);
     projects.forEach((project, index) => {
       if (index % 2 === 0) {
         setEvenProjects((evenProjects) => [...evenProjects, project]);
@@ -21,7 +21,7 @@ export default function Projects({projects}) {
     });
   };
   useEffect(() => {
-    if(projects && oddProjects.length === 0) {
+    if (projects && oddProjects.length === 0) {
       projectsParser(projects);
     }
   }, [projects, oddProjects]);
@@ -41,9 +41,6 @@ export default function Projects({projects}) {
             </div>
           </div>
           <div className={styles.CardBody}>
-            <div className={styles.ProjectDescriptionContainer}>
-              <p className={styles.ProjectDescription}>{project.description}</p>
-            </div>
             <div className={styles.ProjectImageContainer}>
               <Image
                 className={styles.ProjectImage}
@@ -52,6 +49,16 @@ export default function Projects({projects}) {
                 alt={project.title}
                 objectFit="cover"
               />
+            </div>
+            <div className={styles.ProjectDescriptionContainer}>
+              <p className={styles.ProjectDescription}>{project.description}</p>
+              <a
+                href={`${process.env.NEXT_PUBLIC_URL}/projects/${project.id}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                More Info...
+              </a>
             </div>
             <div className={styles.ProjectLinksContainer}>
               <a
@@ -110,16 +117,15 @@ export default function Projects({projects}) {
 export async function getServerSideProps(context) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`);
   const data = await res.json();
-  if(!data) {
+  if (!data) {
     return {
       notFound: true
-    }
-  } else {
-    return { 
-      props: {
-         projects: data
-      } 
     };
-
+  } else {
+    return {
+      props: {
+        projects: data
+      }
+    };
   }
 }

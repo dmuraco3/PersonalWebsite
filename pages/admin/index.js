@@ -10,14 +10,15 @@ import { signIn, signOut, useSession } from "next-auth/client";
 import { useState } from "react";
 
 import { Calender, Users, Messages, Email, Posts } from "components/admin";
-
+import Projects from "components/admin/Projects";
 import { withRouter, useRouter } from "next/router";
 import {
   FaCalendar,
   FaUser,
   FaInbox,
   FaEnvelopeSquare,
-  FaChalkboard
+  FaChalkboard,
+  FaHamsa
 } from "react-icons/fa";
 
 function Admin(props) {
@@ -54,6 +55,12 @@ function Admin(props) {
       icon: <FaChalkboard />,
       active: props.router.query.active === "Posts",
       component: <Posts />
+    },
+    {
+      title: "Projects",
+      icon: <FaHamsa />,
+      active: props.router.query.active === "Projects",
+      component: <Projects />
     }
   ];
   function getPosts() {
@@ -130,7 +137,6 @@ function Admin(props) {
                 )}
               </div>
             </div>
-            
           )}
           {!session && (
             <>

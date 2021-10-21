@@ -1,0 +1,39 @@
+@mixin mobile {
+  @media (max-width: 500px) {
+    @content;
+  }
+}
+@mixin desktop {
+  @media (min-width: 500px) {
+    @content;
+  }
+}
+
+@include mobile() {
+  .ProjectContainer {
+    margin: 0% 5% 0% 5%;
+  }
+}
+@include desktop() {
+  .ProjectContainer {
+    margin: 0% 20% 0% 20%;
+  }
+}
+
+.ImageContainer {
+  position: relative;
+  padding-bottom: calc((9/16) * 100%); 
+}
+
+.ProjectBody {
+  margin-top: 40px;
+}
+.DescriptionContainer {
+  .Description {
+    font-size: 20px;
+  }
+}
+.BodyContainer {
+  font-size: 18px;
+
+}

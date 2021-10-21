@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
   const { id } = req.query;
+  console.log(id)
   const project = await prisma.project.findUnique({
     where: {
       id: Number(id)

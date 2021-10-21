@@ -11,7 +11,6 @@ export default function Project({ project }) {
   return (
     <main>
       <Navigation />
-      {JSON.stringify(project)}
       <div className={styles.ProjectContainer}>
         <div className={styles.TitleContainer}>
           <h1 className={styles.Title}>{project.title}</h1>

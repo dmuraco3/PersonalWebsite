@@ -12,12 +12,18 @@ export default async (req, res) => {
         body.hasOwnProperty("published") &&
         body.hasOwnProperty("title") &&
         body.hasOwnProperty("description") &&
+        body.hasOwnProperty("image") &&
+        body.hasOwnProperty("link") &&
+        body.hasOwnProperty("codeLink") && 
         body.hasOwnProperty("body")
       ) {
         const project = {
           published: body.published,
           title: body.title,
           description: body.description,
+          link: body.link,
+          codeLink: body.codeLink,
+          image: body.image,
           body: body.body
         };
         const added = await prisma.project.create({ data: project });

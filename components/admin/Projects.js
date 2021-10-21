@@ -48,11 +48,21 @@ export default function Projects() {
       setPostWarningInfo("missing published");
 
       setShowPostWarning(true);
+    } else if (!data.hasOwnProperty("link")) {
+      setPostWarningInfo("missing link");
+      setShowPostWarning(true);
+    } else if (!data.hasOwnProperty("codeLink")) {
+      setPostWarningInfo("missing codeLink");
+      setShowPostWarning(true);
+    } else if (!data.hasOwnProperty("image")) {
+      setPostWarningInfo("missing image");
+      setShowPostWarning(true);
     } else if (!data.hasOwnProperty("body")) {
       setPostWarningInfo("missing body");
       setShowPostWarning(true);
     } else {
       setShowPostWarning(false);
+      console.log(modalData.data);
       fetch(url, {
         method: "POST",
         headers: {
@@ -98,6 +108,9 @@ export default function Projects() {
         title: postData.title,
         description: postData.description,
         published: postData.published,
+        link: postData.link,
+        codeLink: postData.codeLink,
+        image: postData.image,
         body: postData.body,
         id: postData.id
       }
@@ -231,6 +244,57 @@ export default function Projects() {
                   />
                 </Form.Group>
                 <Form.Group>
+                  <h1 className={Styles.PostHeader}>Link</h1>
+
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="link"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="text"
+                      value={modalData.data?.link}
+                      onChange={(e) => {
+                        handleModalDataChange("link", e.target.value);
+                      }}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group>
+                  <h1 className={Styles.PostHeader}>Code Link</h1>
+
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="codeLink"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="text"
+                      value={modalData.data?.codeLink}
+                      onChange={(e) => {
+                        handleModalDataChange("codeLink", e.target.value);
+                      }}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group>
+                  <h1 className={Styles.PostHeader}>Image Link</h1>
+
+                  <FloatingLabel
+                    controlId="floatingInput"
+                    label="image"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="text"
+                      value={modalData.data?.image}
+                      onChange={(e) => {
+                        handleModalDataChange("image", e.target.value);
+                      }}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group>
                   <h1 className={Styles.PostHeader}>Body</h1>
 
                   <FastEditor
@@ -255,7 +319,7 @@ export default function Projects() {
                   }
                   if (!modalData.edit) {
                     postData(
-                      `${process.env.NEXT_PUBLIC_URL}/api/projects/newpost`
+                      `${process.env.NEXT_PUBLIC_URL}/api/projects/newproject`
                     );
                   }
                 }}
@@ -296,7 +360,7 @@ export default function Projects() {
               <div className={Styles.PostMain}>
                 <h1>
                   <ActiveLink
-                    href={`${process.env.NEXT_PUBLIC_URL}/blog/post/${item.id}`}
+                    href={`${process.env.NEXT_PUBLIC_URL}/projects/${item.id}`}
                   >
                     {item.title}
                   </ActiveLink>

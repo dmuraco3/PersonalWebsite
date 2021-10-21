@@ -24,7 +24,8 @@ export default function Posts() {
     edit: false,
     data: {
       published: false,
-      body: ""
+      body: "",
+      rawBody: "",
     }
   });
   const handleModalClose = () => setShowModal(false);

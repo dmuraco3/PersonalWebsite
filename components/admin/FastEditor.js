@@ -4,16 +4,13 @@ import PostStyles from "../../pages/blog/post/post.module.scss";
 import React, { useState, useEffect, } from "react";
 import ReactDOMServer from "react-dom/server";
 
-import Lowlight from "react-lowlight";
-import js from "highlight.js/lib/languages/javascript";
-Lowlight.registerLanguage("js", js);
+import Highlight, { defaultProps } from "prism-react-renderer";
+import dracula from "prism-react-renderer/themes/dracula"
+import langDetector from 'lang-detector'
 
 import dynamic from "next/dynamic";
-import { EditorState, convertToRaw, RichUtils, Modifier, EditorBlock, DefaultDraftBlockRenderMap} from "draft-js";
-import {Map} from 'immutable';
-import ReactHtmlParser from "react-html-parser";
-import { stateToHTML } from "draft-js-export-html";
-import { stateFromHTML } from "draft-js-import-html";
+import { EditorState, RichUtils, Modifier, EditorBlock} from "draft-js";
+import {convertFromHTML, convertToHTML} from "draft-convert"
 
 import axios from "axios";
 
@@ -50,118 +47,38 @@ const Editor = dynamic(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
 );
+
 export default function FastEditor(props) {
   const [editor, setEditor] = useState();
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  class codeBlock extends React.Component {
-    render() {
-      let data;
-      return (
-        <>
-          <EditorBlock {...this.props} onChange={() => console.log(this.props)}/>
-        </>
-      )
-    }
-  }
   
-  function myBlockRenderer(contentBlock) {
-    const type = contentBlock.getType();
-    if (type === 'code') {
-      return {
-        component: codeBlock,
-        
-      };
-    }
-  }
-  let options = {
-    inlineStyles: {
-      // Override default element (`strong`).
-      BOLD: { element: "b" },
-      SUPERSCRIPT: { element: "sup" },
-      SUBSCRIPT: { element: "sub" },
-      CODE: {
-        style: {
-          background: "#f1f1f1",
-          "border-radius": "3px",
-          padding: "1em 10px",
-          color: "black"
-        }
-      }
-    },
-    blockStyleFn: (block) => {
-      let data = block.getData();
-      if (data.size === 0) return;
-
-      let style = {};
-      if (data.get("text-align"))
-        style = { ...style, textAlign: data.get("text-align") };
-      return { style };
-    },
-    blockRenderers: {
-      bold: (block) => {
-        return `<b>` + block.getText() + `</b>`;
-      },
-      // unstyled: (block) => {
-      //   return `<p class=${PostStyles.Normal}>` + block.getText() + `</P>`;
-      // },
-      "header-one": (block) => {
-        return `<h1 class=${PostStyles.HeaderOne}>` + block.getText() + `</h1>`;
-      },
-      "header-two": (block) => {
-        return `<h2>` + block.getText() + `</h2>`;
-      },
-      "header-three": (block) => {
-        return `<h3>` + block.getText() + `</h3>`;
-      },
-      "header-four": (block) => {
-        return `<h4>` + block.getText() + `</h4>`;
-      },
-      "header-five": (block) => {
-        return `<h5>` + block.getText() + `</h5>`;
-      },
-      "header-six": (block) => {
-        return `<h6>` + block.getText() + `</h6>`;
-      },
-      blockquote: (block) => {
-        return (
-          `<blockquote class=${PostStyles.BlockQuote}>` +
-          block.getText() +
-          `</blockquote>`
-        );
-      },
-      code: (block) => {
-        return ReactDOMServer.renderToStaticMarkup(
-          <Lowlight language="js" value={block.getText()} />
-        )
-      }
-    }
-  };
 
   useEffect(() => {
     if (!editor) {
       if (!editorState.getCurrentContent().hasText()) {
-        let state = stateFromHTML(props.modalData.data?.body);
+        // let state = stateFromHTML(props.modalData.data?.body);
+        let state = convertFromHTML(convertFromHTMLOptions)(props.modalData.data?.body);
         state = EditorState.createWithContent(state);
         setEditorState(state);
       }
       setEditor(true);
     }
   }, [editor, setEditor, props, editorState]);
+
+
+  
   return (
     <div className="editor">
       {editor ? (
         <>
-          
           <Editor
            
             wrapperClassName={Styles.EditorWrapperWrapper}
             editorClassName={Styles.EditorWrapper}
             toolbarClassName={Styles.ToolBarWrapper}
-            blockRendererFn={myBlockRenderer}
             editorState={editorState}
-            // blockRenderMap={extendedBlockRenderMap}
             onTab={(event) => {
               event.preventDefault();
               let currentState = editorState;
@@ -197,7 +114,8 @@ export default function FastEditor(props) {
               setEditorState(e);
               props.handleModalDataChange(
                 "body",
-                stateToHTML(e.getCurrentContent(), options)
+                convertToHTML(convertToHTMLOptions)(e.getCurrentContent())
+                // stateToHTML(e.getCurrentContent(), stateToHTMLOptions)
               );
             }}
             toolbar={{
@@ -220,4 +138,133 @@ export default function FastEditor(props) {
       )}
     </div>
   );
+}
+
+const PostCodeBlock = ({code, language}) => {
+  const codeType = langDetector(code)
+  return (
+    <pre>
+      <Highlight {...defaultProps} theme={dracula} code={code} language={codeType.toLocaleLowerCase()}>
+        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+          <>
+            <pre className={className} style={style}>
+              {tokens.map((line, i) => (
+                <div key={i} {...getLineProps({ line, key: i })}>
+                  {line.map((token, key) => (
+                    <span key={key} {...getTokenProps({ token, key })} />
+                  ))}
+                </div>
+              ))}
+            </pre>
+          
+          </>
+        )}
+      </Highlight>
+    </pre> 
+  )
+}
+
+const convertToHTMLOptions = {
+  blockToHTML: (block, options) => {
+    // if (block.type === "code") {
+    //   return ReactDOMServer.renderToStaticMarkup(
+    //     <PostCodeBlock code={block.text} language="javascript"/>
+    //   );
+    // }
+    switch (block.type) {
+      case "unstyled":
+        return <p className={PostStyles.Unstyled}/>;
+
+      case "header-one":
+        return <h1 className={PostStyles.HeaderOne}/>;
+
+      case "header-two":
+        return <h2 className={PostStyles.HeaderTwo}/>;
+
+      case "header-three":
+        return <h3 className={PostStyles.HeaderThree}/>;
+
+      case "header-four":
+        return <h4 className={PostStyles.HeaderFour}/>;
+      
+      case "header-five":
+        return <h5 className={PostStyles.HeaderFive}/>;
+        
+      case "header-six":
+        return <h6 className={PostStyles.HeaderSix}/>;
+
+      case "blockquote":
+        return <blockquote className={PostStyles.BlockQuote} />
+      
+      case "code":
+        return ReactDOMServer.renderToStaticMarkup(
+          <PostCodeBlock code={block.text}/>
+        );
+
+      case "atomic": 
+          return {start: `<figure class=${PostStyles.ImageContainer}>`, end: '</figure>',}
+    }
+
+  },
+  entityToHTML: (entity, options) => {
+    switch (entity.type) {
+      case "LINK":
+        return (
+          <a href={entity.data.url}>
+            {entity.data.url}
+          </a>
+        );
+      case "IMAGE":
+        return `<img style="width: 100%" src="${entity.data.src}" />`;
+        // return (
+        //   <figure className={PostStyles.ImageContainer}>
+        //     <img
+        //       src={entity.data.src}
+        //       width={entity.data.width}
+              
+        //       alt={entity.data.alt}
+        //       className={PostStyles.Image}
+        //     />
+
+        //   </figure>
+        // );
+    }
+  }
+}
+
+const convertFromHTMLOptions = {
+  htmlToStyle: (nodeName, node, currentStyle) => {
+      if (nodeName === 'span' && node.style.color === 'blue') {
+          return currentStyle.add('BLUE');
+      } else {
+          return currentStyle;
+      }
+  },
+  htmlToBlock: (nodeName, node) => {
+    if (nodeName === 'blockquote') {
+        return {
+            type: 'blockquote',
+            data: {}
+        };
+    }
+    if(nodeName === 'pre'){
+      return {
+        type: 'code',
+        text: node.textContent
+      }
+    }
+    if(nodeName === "figure"){
+      return 'atomic'
+    }
+    if(nodeName === "img") {
+      return "atomic"
+    }
+    console.log("name: ", nodeName)
+  },
+  htmlToEntity: (nodeName, node, createEntity) => {
+    if (nodeName === 'img') {
+      return createEntity('IMAGE', 'IMMUTABLE', {src : node.src, alt: node.alt, style:"width: 100%; height: 100%;", width: "100%", height: "100%"});
+    }
+  },
+  
 }

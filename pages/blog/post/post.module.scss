@@ -15,22 +15,44 @@
     margin-top: 2.5%;
     margin-bottom: 5%;
 }
+
+.Unstyled {
+
+}
+
+.HeaderOne {
+    font-weight: 500;
+}
+.HeaderTwo {
+    font-weight: 500;
+
+}
+.HeaderThree {
+    font-weight: 500;
+
+}
+.HeaderFour {
+    font-weight: 500;
+    
+}
+.HeaderFive {
+    font-weight: 500;
+
+}
+.HeaderSix {
+    font-weight: 500;
+
+}
+
 .BlockQuote {
     border-left: 5px solid #f1f1f1;
     padding-left: 5px;
 }
-.Code{
-    background: #f1f1f1;
-    background-image: initial;
-    background-position-x: initial;
-    background-position-y: initial;
-    background-size: initial;
-    background-repeat-x: initial;
-    background-repeat-y: initial;
-    background-attachment: initial;
-    background-origin: initial;
-    background-clip: initial;
-    background-color: rgb(241, 241, 241);
-    padding: 1em 10px;
-    border-radius: 3px;
-  }
+
+.ImageContainer {
+    position: relative;
+    width: 100%;
+    .Image {
+
+    }
+}

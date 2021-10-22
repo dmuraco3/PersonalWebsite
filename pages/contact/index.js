@@ -1,5 +1,3 @@
-import Navigation from "../../components/navbar";
-import Footer from "../../components/Footer";
 import styles from "./Contact.module.scss";
 
 import {useState} from "react";
@@ -22,7 +20,6 @@ export default function Contact() {
   }
   return (
     <>
-      <Navigation />
       <div className={styles.Contact}>
         <div className={styles.ContactHeaderContainer}>
           <h1 className={styles.ContactHeader}>Contact Me</h1>
@@ -52,7 +49,6 @@ export default function Contact() {
           </form>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

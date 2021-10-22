@@ -1,12 +1,11 @@
 import { useRouter } from "next/router";
 import ProjectStyles from './homeProjects.module.scss'
-import Navigation from "../components/navbar";
-import Footer from "../components/Footer";
 
 import Typist from "react-typist";
 import { FaChevronDown as Down, FaChevronRight as Right } from "react-icons/fa";
 
 import Image from 'next/image'
+import Header from 'next/head'
 
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
@@ -67,10 +66,11 @@ export default function Home() {
 
   return (
     <main>
+      <Header>
+        <title>Dylan Muraco</title>
+        <meta name="description" content="My name is Dylan Muraco. I've been desiging and building applications for 3 years."/>
+      </Header>
       <div className="focal">
-        <Navigation
-          style={{ position: "absolute", zIndex: 1, width: "100vw" }}
-        />
         <div className="focal-background"></div>
         <div className="focal-focus">
           <span style={{ fontWeight: 400 }}>I'm a </span>
@@ -181,19 +181,6 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <footer
-        style={{
-          backgroundColor: "#212529",
-          color: "white",
-          padding: "10px",
-          bottom: 0,
-          width: "100%"
-        }}
-      >
-        <center>
-          <a>© 2021 Dylan Muraco. All rights reserved.</a>
-        </center>
-      </footer>
     </main>
   );
 }

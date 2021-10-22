@@ -1,12 +1,9 @@
-import Navigation from "components/navbar";
 import Styles from "./about.module.scss";
-import Footer from "components/Footer";
 import Image from "next/image";
 import { FaTwitter, FaYoutube, FaGithub } from "react-icons/fa";
 export default function About() {
   return (
     <>
-      <Navigation />
       <div className={Styles.main}>
         <div className={Styles.center}>
           <div className={Styles.AboutHeader}>
@@ -59,18 +56,9 @@ export default function About() {
               </div>
             </div>
 
-            {/* <div className={Styles.container}>
-              <h2>My Skills</h2>
-              <div className={Styles.SkillsContainer}>
-                <div className={Styles.Skill}>
-
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </div>
-      {/* <Footer /> */}
     </>
   );
 }

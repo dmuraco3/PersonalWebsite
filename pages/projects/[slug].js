@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import Navigation from "../../components/navbar";
 
 import styles from "./Project.module.scss";
 import ReactHtmlParser from "react-html-parser";
@@ -10,7 +9,6 @@ export default function Project({ project }) {
   const { slug } = router.query;
   return (
     <main>
-      <Navigation />
       <div className={styles.ProjectContainer}>
         <div className={styles.TitleContainer}>
           <h1 className={styles.Title}>{project.title}</h1>

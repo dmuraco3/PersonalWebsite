@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
-import Navigation from "../../components/navbar";
 import styles from "./projects.module.scss";
 
 import Image from "next/image";
-
-import Footer from "components/Footer";
 
 export default function Projects({ projects }) {
   const [evenProjects, setEvenProjects] = useState([]);
@@ -86,7 +83,6 @@ export default function Projects({ projects }) {
 
   return (
     <main>
-      <Navigation />
       <div className={styles.ProjectsContainer}>
         <div className={styles.MobileProjects}>
           {projects &&
@@ -109,7 +105,6 @@ export default function Projects({ projects }) {
           </div>
         </div>
       </div>
-      <Footer />
     </main>
   );
 }

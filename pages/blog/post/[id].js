@@ -1,14 +1,10 @@
-import { useRouter } from "next/router";
 import styles from "./post.module.scss";
-import Navigation from "../../../components/navbar";
-import Footer from "components/Footer";
 import { PrismaClient } from "@prisma/client";
 import ReactHtmlParser from "react-html-parser";
 
 function Blog({ post }) {
   return (
     <main>
-      <Navigation />
       <div className={styles.mainContainer}>
         <div className={styles.PostHeading}>
           <h1>{post.title}</h1>
@@ -17,7 +13,6 @@ function Blog({ post }) {
         </div>
         <div>{ReactHtmlParser(post.body)}</div>
       </div>
-      <Footer />
     </main>
   );
 }

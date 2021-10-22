@@ -1,4 +1,3 @@
-import Navigation from "components/navbar";
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { useRouter } from "next/router";
@@ -27,7 +26,6 @@ function Blog({ posts }) {
 
   return (
     <main>
-      <Navigation />
       <h1 style={{ textAlign: "center" }}>Posts</h1>
       <div className={Styles.postsContainer}>
         {posts && (

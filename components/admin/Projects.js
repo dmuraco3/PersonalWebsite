@@ -82,7 +82,7 @@ export default function Projects() {
     }
   };
   const deletePost = (id) => {
-    fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects/deletepost`, {
+    fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects/deleteproject`, {
       method: "post",
       headers: {
         "Content-Type": "application/json"

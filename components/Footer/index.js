@@ -15,7 +15,8 @@ export default function Footer() {
   useEffect(() => {
     if(!windowListener){
       window.addEventListener("resize", changeStyle);
-      window.addEventListener("scroll", changeStyle);
+      const resizeObserver = new ResizeObserver(changeStyle);
+      resizeObserver.observe(document.body)
       setWindowListener(true);
     }
     

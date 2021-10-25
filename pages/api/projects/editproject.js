@@ -12,9 +12,12 @@ export default async (req, res) => {
           id: body.id
         },
         data: {
+          published: body.published,
           title: body.title,
           description: body.description,
-          published: body.published,
+          link: body.link,
+          codeLink: body.codeLink,
+          image: body.image,
           body: body.body
         }
       });

@@ -314,7 +314,7 @@ export default function Projects() {
                 onClick={() => {
                   if (modalData.edit) {
                     postData(
-                      `${process.env.NEXT_PUBLIC_URL}/api/projects/editpost`
+                      `${process.env.NEXT_PUBLIC_URL}/api/projects/editproject`
                     );
                   }
                   if (!modalData.edit) {

@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 
+import Link from "next/link";
+
 function ActiveLink({ children, href }) {
   const router = useRouter();
 
@@ -10,15 +12,12 @@ function ActiveLink({ children, href }) {
         : "rgba(255,255,255,.5)"
   };
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    router.push(href);
-  };
-
   return (
-    <a className="link" href={href} onClick={handleClick} style={style}>
-      {children}
-    </a>
+    <Link href={href} passHref={true}>
+      <a className="link" style={style}>
+        {children}
+      </a>
+    </Link>
   );
 }
 

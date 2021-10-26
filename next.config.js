@@ -7,6 +7,6 @@ module.exports = {
     return config;
   },
   images: {
-    domains: ["via.placeholder.com"]
+    domains: ["via.placeholder.com", "i.imgur.com", "imgur.com"]
   }
 };

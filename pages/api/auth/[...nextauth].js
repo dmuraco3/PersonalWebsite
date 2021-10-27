@@ -13,6 +13,9 @@ export default NextAuth({
 
     // ...add more providers here
   ],
+  session: {
+    jwt: true
+  },
   callbacks: {
     /**
      * @param  {object}  token     Decrypted JSON Web Token

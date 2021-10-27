@@ -7,7 +7,12 @@ import Navigation from "../components/navbar";
 import Footer from "../components/Footer";
 import Header from 'next/head'
 
-function MyApp({ Component, pageProps }) {
+import {Provider} from 'next-auth/client'
+
+export default function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+  }) {
   return (
     <>
       <Header>
@@ -30,11 +35,11 @@ function MyApp({ Component, pageProps }) {
         <meta name="keywords" content="web development, coding, javascript, react"/>
 
       </Header>
-      <Navigation />
-      <Component {...pageProps} />
-      <Footer />
+      <Provider session={session}>
+        <Navigation />
+        <Component {...pageProps} />
+        <Footer />
+      </Provider>
     </>
   )
 }
-
-export default MyApp;

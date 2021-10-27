@@ -1,9 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import hasCorrectRole from 'helpers/hasCorrectRole'
+import { getToken } from "next-auth/jwt";
+import { getSession } from "next-auth/client";
 const prisma = new PrismaClient();
 
 export default async function handler(req, res) {
-  if(hasCorrectRole){
+  const authorized = await hasCorrectRole(req, res);
+  if(authorized){
     let posts = await prisma.post.findMany({
       orderBy: [
         {

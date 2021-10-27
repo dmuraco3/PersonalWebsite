@@ -10,11 +10,12 @@ import Header from "next/head";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home({ projects, posts }) {
   const hostUrl = process.env.NEXT_PUBLIC_URL;
   const portfolio = useRef(null);
+
 
   const executeScroll = () => {
     portfolio.current.scrollIntoView();
@@ -183,8 +184,16 @@ export default function Home({ projects, posts }) {
 }
 
 export async function getServerSideProps(context) {
-  const projectRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`);
-  const postRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`);
+  const projectRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`, {
+    headers: {
+      cookie: context.req.headers.cookie
+    }
+  });
+  const postRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`, {
+    headers: {
+      cookie: context.req.headers.cookie
+    } 
+  });
   const projects = await projectRes.json();
   const posts = await postRes.json();
   return {

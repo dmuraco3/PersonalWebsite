@@ -63,8 +63,12 @@ function Blog({ posts }) {
   );
 }
 
-export async function getServerSideProps() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`);
+export async function getServerSideProps(context) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`, {
+    headers: {
+      cookie: context.req.headers.cookie
+    }
+  });
   const posts = await res.json();
   return {
     props: {

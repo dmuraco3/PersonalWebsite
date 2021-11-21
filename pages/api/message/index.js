@@ -1,6 +1,8 @@
 import rateLimit from "express-rate-limit";
 
+import {PrismaClient} from '@prisma/client'
 
+const prisma = new PrismaClient()
 
 function initMiddleware(middleware) {
     return (req, res) => new Promise((resolve, reject) => {
@@ -26,6 +28,13 @@ export default async function handler(req, res) {
     if(req.method === 'POST') {
         const body = JSON.parse(req.body)
         if(body.name && body.email && body.message) {
+            const message = await prisma.message.create({
+                data: {
+                    name: body.name,
+                    email: body.email,
+                    message: body.message
+                }
+            })
             res.status(200).json({good: "good"})
         } else {
             res.status(400).json({error: "bad"})

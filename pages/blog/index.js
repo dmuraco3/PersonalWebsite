@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Spinner from "react-bootstrap/Spinner";
 import { useRouter } from "next/router";
-
+import {getPosts} from '../../helpers/Posts'
 import Styles from "./blog.module.scss";
 
 function Blog({ posts }) {
@@ -63,17 +63,13 @@ function Blog({ posts }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`, {
-    headers: {
-      cookie: context.req.headers.cookie
-    }
-  });
-  const posts = await res.json();
+export async function getStaticProps(context) {
+  const posts = await getPosts();
   return {
     props: {
       posts
-    }
+    },
+    revalidate: 5,
   };
 }
 

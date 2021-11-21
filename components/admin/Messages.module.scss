@@ -1,0 +1,24 @@
+.main {
+    width: 100%;
+    .header {
+        width: 100%;
+    
+        text-align: center;
+    }
+    .messages {
+        width: 100%;
+        padding: 0px 50px;
+        .message {
+            border: 1px solid #a3a3a3;
+            padding: 10px;
+            margin-bottom: 10px;
+            .from, .email {
+                display: block;
+            }
+            .email {
+                margin-bottom: 10px;
+            }
+        }
+    }
+
+}

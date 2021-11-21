@@ -3,6 +3,8 @@ import styles from "./projects.module.scss";
 
 import Image from "next/image";
 
+import {getProjects} from 'helpers/Posts'
+
 export default function Projects({ projects }) {
   const [evenProjects, setEvenProjects] = useState([]);
   const [oddProjects, setOddProjects] = useState([]);
@@ -109,18 +111,18 @@ export default function Projects({ projects }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`);
-  const data = await res.json();
-  if (!data) {
+export async function getStaticProps(context) {
+  const projects = await getProjects();
+  if (!projects) {
     return {
       notFound: true
     };
   } else {
     return {
       props: {
-        projects: data
-      }
+        projects
+      },
+      revalidate: 5
     };
   }
 }

@@ -1,4 +1,47 @@
 .Contact {
+    .AlertShown {
+        transform: translateY(0%);
+        top: 5px;
+    }
+    .AlertHidden {
+        top: -100%;
+        transform: translateY(-25%);
+
+    }
+    .Alert {
+        position: absolute;
+        left: 50%;
+        width: 97.5vw;
+        transform: translateX(-50%);
+        border-radius: 5px;
+        background-color: #28a745;
+    
+        transition: all 0.3s ease-in-out;
+        
+        .exit {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: white;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .head, .body {
+            display:block;
+            color: white;
+        }
+        .head {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .body {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 5px;
+        }
+    }
     margin-top: 40px;
     display: flex;
     flex-wrap: wrap;

@@ -10,7 +10,9 @@ import Header from "next/head";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+
+import {getPosts, getProjects} from '../helpers/Posts'
 
 export default function Home({ projects, posts }) {
   const hostUrl = process.env.NEXT_PUBLIC_URL;
@@ -183,23 +185,14 @@ export default function Home({ projects, posts }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const projectRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/projects`, {
-    headers: {
-      cookie: context.req.headers.cookie
-    }
-  });
-  const postRes = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/blog/posts`, {
-    headers: {
-      cookie: context.req.headers.cookie
-    } 
-  });
-  const projects = await projectRes.json();
-  const posts = await postRes.json();
+export async function getStaticProps(context) {
+  const projects = await getProjects()
+  const posts = await getPosts()
   return {
     props: {
       projects,
       posts
-    }
+    },
+    revalidate: 5,
   };
 }

@@ -10,38 +10,39 @@ import Header from "next/head";
 import Spinner from "react-bootstrap/Spinner";
 import Card from "react-bootstrap/Card";
 
+import Link from 'next/link'
+
 import { useRef } from "react";
 
-import {getPosts, getProjects} from '../helpers/Posts'
 
 export default function Home({ projects, posts }) {
   const hostUrl = process.env.NEXT_PUBLIC_URL;
   const portfolio = useRef(null);
-
-
+  
+  
   const executeScroll = () => {
     portfolio.current.scrollIntoView();
   };
-
+  
   function ActiveLink({ children, href }) {
     const router = useRouter();
     const style = {
       marginRight: 10,
       color: "blue"
     };
-
+    
     const handleClick = (e) => {
       e.preventDefault();
       router.push(href);
     };
-
+    
     return (
-      <a href={href} onClick={handleClick} style={style}>
+      <Link href={href} target="_blank" style={style}>
         {children}
-      </a>
+      </Link>
     );
   }
-
+  
   return (
     <main>
       <Header>
@@ -49,7 +50,7 @@ export default function Home({ projects, posts }) {
         <meta
           name="description"
           content="My name is Dylan Muraco. I've been desiging and building applications for 3 years."
-        />
+          />
       </Header>
       <div className="focal">
         <div className="focal-background"></div>
@@ -108,7 +109,7 @@ export default function Home({ projects, posts }) {
                         src={item.image}
                         layout="fill"
                         objectFit="cover"
-                      />
+                        />
                     </div>
                     <div className={ProjectStyles.ProjectDescriptionContainer}>
                       <p className={ProjectStyles.ProjectDescription}>
@@ -122,7 +123,7 @@ export default function Home({ projects, posts }) {
                       <a
                         className={ProjectStyles.CodeLink}
                         href={item.codeLink}
-                      >
+                        >
                         View Code
                       </a>
                     </div>
@@ -138,7 +139,7 @@ export default function Home({ projects, posts }) {
         <center>
           <h3>Blog</h3>
           <h5 style={{ fontWeight: 200, color: "#141c3a" }}>
-            Sometimes I talk about stuff
+            These are posts from my <a href="https://dev.to/dmuraco3" target="_blank" rel="noreferrer">dev.to blog</a>
           </h5>
         </center>
 
@@ -153,9 +154,9 @@ export default function Home({ projects, posts }) {
                 <Card key={index} style={{ width: "100%" }}>
                   <Card.Body>
                     <Card.Title>
-                      <ActiveLink href={`${hostUrl}/blog/post/${item.id}`}>
+                      <a href={`${item.url}`} target="_blank" rel="noreferrer">
                         {item.title}
-                      </ActiveLink>
+                      </a>
                     </Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">
                       {item.date}
@@ -176,7 +177,7 @@ export default function Home({ projects, posts }) {
           <a
             className="touch-me"
             href={`${process.env.NEXT_PUBLIC_URL}/contact`}
-          >
+            >
             Get in Touch
           </a>
         </div>
@@ -185,9 +186,12 @@ export default function Home({ projects, posts }) {
   );
 }
 
+import { getProjects} from '../helpers/Posts'
+
 export async function getStaticProps(context) {
   const projects = await getProjects()
-  const posts = await getPosts()
+  const res = await fetch(`https://dev.to/api/articles?username=dmuraco3&per_page=10`)
+  const posts = await res.json()
   return {
     props: {
       projects,
